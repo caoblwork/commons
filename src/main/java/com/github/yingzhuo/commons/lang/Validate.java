@@ -214,12 +214,12 @@ public class Validate {
      * @param message  the {@link String#format(String, Object...)} exception message if invalid, not null
      * @param values  the optional values for the formatted exception message
      * @return the validated object (never {@code null} for method chaining)
-     * @throws NullPointerException if the object is {@code null}
+     * @throws IllegalArgumentException if the object is {@code null}
      * @see #notNull(Object)
      */
     public static <T> T notNull(T object, String message, Object... values) {
         if (object == null) {
-            throw new NullPointerException(String.format(message, values));
+            throw new IllegalArgumentException(String.format(message, values));
         }
         return object;
     }

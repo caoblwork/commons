@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.lang.Validate;
 
 /**
  * Decorates another <code>Collection</code> to validate that additions
@@ -71,9 +72,7 @@ public class PredicatedCollection<E> extends AbstractSerializableCollectionDecor
      */
     protected PredicatedCollection(Collection<E> coll, Predicate<E> predicate) {
         super(coll);
-        if (predicate == null) {
-            throw new IllegalArgumentException("Predicate must not be null");
-        }
+        Validate.notNull(predicate);
         this.predicate = predicate;
         for (Iterator<E> it = coll.iterator(); it.hasNext(); ) {
             validate(it.next());

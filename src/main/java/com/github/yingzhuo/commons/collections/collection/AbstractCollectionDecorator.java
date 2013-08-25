@@ -19,6 +19,8 @@ package com.github.yingzhuo.commons.collections.collection;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.github.yingzhuo.commons.lang.Validate;
+
 /**
  * Decorates another <code>Collection</code> to provide additional behaviour.
  * <p>
@@ -53,9 +55,7 @@ public abstract class AbstractCollectionDecorator<E> implements Collection<E> {
      * @throws IllegalArgumentException if the collection is null
      */
     protected AbstractCollectionDecorator(Collection<E> coll) {
-        if (coll == null) {
-            throw new IllegalArgumentException("Collection must not be null");
-        }
+        Validate.notNull(coll);
         this.collection = coll;
     }
 
