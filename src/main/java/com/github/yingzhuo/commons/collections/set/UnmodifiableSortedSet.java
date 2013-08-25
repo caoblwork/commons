@@ -16,36 +16,65 @@
  */
 package com.github.yingzhuo.commons.collections.set;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
+import java.util.SortedSet;
 
 import com.github.yingzhuo.commons.collections.iterator.ImmutableIterator;
 import com.github.yingzhuo.commons.immutable.Immutable;
 
 /**
- * Decorates another <code>Set</code> to ensure it can't be altered.
+ * Decorates another <code>SortedSet</code> to ensure it can't be altered.
  *
  */
-public final class ImmutableSet<E>
-        extends AbstractSerializableSetDecorator<E>
+public final class UnmodifiableSortedSet<E>
+        extends AbstractSortedSetDecorator<E>
         implements Immutable, Serializable {
 
-	private static final long serialVersionUID = 8881133460724646424L;
+    /** Serialization version */
+    private static final long serialVersionUID = -725356885467962424L;
 
-	/**
+    /**
      * Factory method to create an unmodifiable set.
      * 
      * @param set  the set to decorate, must not be null
      * @throws IllegalArgumentException if set is null
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <E> Set<E> decorate(Set<E> set) {
-        if (set instanceof ImmutableSet) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static <E> SortedSet<E> decorate(SortedSet<E> set) {
+        if (set instanceof Immutable) {
             return set;
         }
-        return new ImmutableSet(set);
+        return new UnmodifiableSortedSet(set);
+    }
+
+    //-----------------------------------------------------------------------
+    /**
+     * Write the collection out using a custom routine.
+     * 
+     * @param out  the output stream
+     * @throws IOException
+     */
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+        out.writeObject(collection);
+    }
+
+    /**
+     * Read the collection in using a custom routine.
+     * 
+     * @param in  the input stream
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
+    @SuppressWarnings("unchecked")
+	private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+        collection = (Collection<E>) in.readObject();
     }
 
     //-----------------------------------------------------------------------
@@ -55,7 +84,7 @@ public final class ImmutableSet<E>
      * @param set  the set to decorate, must not be null
      * @throws IllegalArgumentException if set is null
      */
-    private ImmutableSet(Set<E> set) {
+    private UnmodifiableSortedSet(SortedSet<E> set) {
         super(set);
     }
 
@@ -86,6 +115,22 @@ public final class ImmutableSet<E>
 
     public boolean retainAll(Collection<?> coll) {
         throw new UnsupportedOperationException();
+    }
+
+    //-----------------------------------------------------------------------
+    public SortedSet<E> subSet(E fromElement, E toElement) {
+        SortedSet<E> sub = getSortedSet().subSet(fromElement, toElement);
+        return UnmodifiableSortedSet.decorate(sub);
+    }
+
+    public SortedSet<E> headSet(E toElement) {
+        SortedSet<E> sub = getSortedSet().headSet(toElement);
+        return UnmodifiableSortedSet.decorate(sub);
+    }
+
+    public SortedSet<E> tailSet(E fromElement) {
+        SortedSet<E> sub = getSortedSet().tailSet(fromElement);
+        return UnmodifiableSortedSet.decorate(sub);
     }
 
 }

@@ -28,6 +28,7 @@ import com.github.yingzhuo.commons.functor.predicate.AnyPredicate;
 import com.github.yingzhuo.commons.functor.predicate.EqualsPredicate;
 import com.github.yingzhuo.commons.functor.predicate.FalsePredicate;
 import com.github.yingzhuo.commons.functor.predicate.NonePredicate;
+import com.github.yingzhuo.commons.functor.predicate.NotNullPredicate;
 import com.github.yingzhuo.commons.functor.predicate.NotPredicate;
 import com.github.yingzhuo.commons.functor.predicate.OrPredicate;
 import com.github.yingzhuo.commons.functor.predicate.TruePredicate;
@@ -79,6 +80,10 @@ public final class FunctorUtils {
 	// PREDICATE
 	// -----------------------------------------------------------------------------------------------------------------------
 	public static final class PREDICATE {
+		
+		public static <T> Predicate<T> notNull() {
+			return NotNullPredicate.INSTANCE;
+		}
 
 		public static <T> Predicate<T> alwaysTrue() {
 			return TruePredicate.INSTANCE;

@@ -18,50 +18,51 @@ package com.github.yingzhuo.commons.collections.iterator;
 
 import java.util.Iterator;
 
-import com.github.yingzhuo.commons.immutable.Immutable;
 import com.github.yingzhuo.commons.lang.Validate;
 
 /** 
- * Decorates an iterator such that it cannot be modified.
+ * Provides basic behaviour for decorating an iterator with extra functionality.
+ * <p>
+ * All methods are forwarded to the decorated iterator.
  *
  */
-public final class ImmutableIterator<E>
-		extends AbstractIteratorDecorator<E>
-		implements Immutable
-{
+public abstract class AbstractIteratorDecorator<E> implements Iterator<E> {
+
+    /** The iterator being decorated */
+    protected final Iterator<E> iterator;
 
     //-----------------------------------------------------------------------
     /**
-     * Decorates the specified iterator such that it cannot be modified.
-     * <p>
-     * If the iterator is already unmodifiable it is returned directly.
+     * Constructor that decorates the specified iterator.
      *
-     * @param iterator  the iterator to decorate
-     * @throws IllegalArgumentException if the iterator is null
+     * @param iterator  the iterator to decorate, must not be null
+     * @throws IllegalArgumentException if the collection is null
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <E> Iterator<E> decorate(Iterator<E> iterator) {
+    public AbstractIteratorDecorator(Iterator<E> iterator) {
         Validate.notNull(iterator);
-        if (iterator instanceof Immutable) {
-            return iterator;
-        }
-        return new ImmutableIterator(iterator);
+        this.iterator = iterator;
     }
-    
-    //-----------------------------------------------------------------------
+
     /**
-     * Constructor.
-     *
-     * @param iterator  the iterator to decorate
+     * Gets the iterator being decorated.
+     * 
+     * @return the decorated iterator
      */
-    private ImmutableIterator(Iterator<E> iterator) {
-        super(iterator);
+    protected Iterator<E> getIterator() {
+        return iterator;
     }
 
     //-----------------------------------------------------------------------
+    public boolean hasNext() {
+        return iterator.hasNext();
+    }
+
+    public E next() {
+        return iterator.next();
+    }
 
     public void remove() {
-        throw new UnsupportedOperationException("remove() is not supported");
+        iterator.remove();
     }
 
 }
