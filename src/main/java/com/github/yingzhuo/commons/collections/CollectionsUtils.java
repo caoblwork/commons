@@ -16,59 +16,7 @@
  */
 package com.github.yingzhuo.commons.collections;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-
-import com.github.yingzhuo.commons.collections.bag.ImmutableBag;
-import com.github.yingzhuo.commons.collections.bag.SynchronizedBag;
-import com.github.yingzhuo.commons.collections.iterator.ImmutableIterator;
 
 public class CollectionsUtils {
 
-	// name spance COLLECTION
-	// -------------------------------------------------------------------------------------------------
-	public static final class COLLECTION
-	{
-		public static <E> Collection<E> asImmutableCollection(Collection<E> collection) {
-			return Collections.unmodifiableCollection(collection);
-		}
-		
-		public static <E> Collection<E> asSynchronizedCollection(Collection<E> collection) {
-			return Collections.synchronizedCollection(collection);
-		}
-	}
-	
-	public static final class BAG {
-		
-		public static <E> Bag<E> asImmutableBag(Bag<E> bag) {
-			return ImmutableBag.decorate(bag);
-		}
-		
-		public static <E> Bag<E> asSynchronizedBag(Bag<E> bag) {
-			return SynchronizedBag.decorate(bag);
-		}
-
-	}
-	
-	public static final class LIST 
-	{
-		public static <E> List<E> asImmutableList(List<E> list) {
-			return Collections.unmodifiableList(list);
-		}
-		
-		public static <E> List<E> asSynchronizedList(List<E> list) {
-			return Collections.synchronizedList(list);
-		}
-
-	}
-	
-	public static final class ITERATOR {
-
-		public static <E> Iterator<E> asImmutableIterator(Iterator<E> iterator) {
-			return ImmutableIterator.decorate(iterator);
-		}
-		
-	}
 }

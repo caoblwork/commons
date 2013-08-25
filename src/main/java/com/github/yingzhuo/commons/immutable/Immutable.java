@@ -25,7 +25,4 @@ package com.github.yingzhuo.commons.immutable;
  *
  */
 public interface Immutable {
-
-	// no method
-
 }

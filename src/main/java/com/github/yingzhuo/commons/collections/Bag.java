@@ -38,8 +38,6 @@ import java.util.Set;
  * In an ideal world, the interface would be changed to fix the problems, however
  * it has been decided to maintain backwards compatibility instead.
  *
- * @author Chuck Burdick
- * @author Stephen Colebourne
  */
 public interface Bag<E> extends Collection<E> {
 
