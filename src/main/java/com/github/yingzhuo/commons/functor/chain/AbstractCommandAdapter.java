@@ -74,12 +74,13 @@ public abstract class AbstractCommandAdapter implements Command, Serializable {
      *  otherwise return <code>false</code>
      */
 	public final boolean postprocess(Context context, Exception exception) {
+		boolean result = false;
 		if (exception != null) {
 			handleException(context, exception);
-			return true;
+			result = true;
 		}
 		doPostprocess(context);
-		return false;
+		return result;
 	}
 
 	/**
