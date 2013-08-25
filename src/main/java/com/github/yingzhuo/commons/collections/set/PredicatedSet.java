@@ -50,7 +50,7 @@ public class PredicatedSet<E> extends PredicatedCollection<E> implements Set<E> 
      * @throws IllegalArgumentException if the set contains invalid elements
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-	public static <E> Set decorate(Set<E> set, Predicate<E> predicate) {
+	public static <E> Set<E> decorate(Set<E> set, Predicate<E> predicate) {
         return new PredicatedSet(set, predicate);
     }
 
