@@ -18,9 +18,10 @@ package com.github.yingzhuo.commons.functor.chain;
 
 import java.io.Serializable;
 
+import com.github.yingzhuo.commons.exception.FunctorException;
 import com.github.yingzhuo.commons.functor.Chain;
 import com.github.yingzhuo.commons.functor.Command;
-import com.github.yingzhuo.commons.functor.Context;
+import com.github.yingzhuo.commons.functor.CommandContext;
 
 /**
  * Adapter of Command
@@ -40,27 +41,26 @@ public abstract class AbstractCommandAdapter implements Command, Serializable {
      * to the next {@link Command} in a {@link Chain} containing this
      * {@link Command} by returning <code>false</code>
      *
-     * @param context The {@link Context} to be processed by this
+     * @param context The {@link CommandContext} to be processed by this
      *  {@link Command}
      *
-     * @exception Exception general purpose exception return
+     * @exception FunctorException general purpose exception return
      *  to indicate abnormal termination
      * @exception IllegalArgumentException if <code>context</code>
      *  is <code>null</code>
      *
-     * @return <code>true</code> if the processing of this {@link Context}
+     * @return <code>true</code> if the processing of this {@link CommandContext}
      *  has been completed, or <code>false</code> if the processing
-     *  of this {@link Context} should be delegated to a subsequent
+     *  of this {@link CommandContext} should be delegated to a subsequent
      *  {@link Command} in an enclosing {@link Chain}
      */
-	public boolean execute(Context context) throws Exception {
+	public boolean execute(CommandContext context) throws FunctorException {
 		return CONTINUE_PROCESSING;
 	}
 
 	/**
      * <p>Execute any cleanup activities, such as releasing resources that
-     * were acquired during the <code>execute()</code> method of this
-     * {@link Filter} instance.</p>
+     * were acquired during the <code>execute()</code>
      *
      * @param exception The <code>Exception</code> (if any) that was thrown
      *  by the last {@link Command} that was executed; otherwise
@@ -73,7 +73,7 @@ public abstract class AbstractCommandAdapter implements Command, Serializable {
      *  method (and therefore need not be rethrown), return <code>true</code>;
      *  otherwise return <code>false</code>
      */
-	public final boolean postprocess(Context context, Exception exception) {
+	public final boolean postprocess(CommandContext context, Exception exception) {
 		boolean result = false;
 		if (exception != null) {
 			handleException(context, exception);
@@ -88,7 +88,7 @@ public abstract class AbstractCommandAdapter implements Command, Serializable {
 	 * 
 	 * @param exception the exception will be handle
 	 */
-	protected void handleException(Context context, Exception exception) {
+	protected void handleException(CommandContext context, Exception exception) {
 		// do nothing
 	}
 	
@@ -97,7 +97,7 @@ public abstract class AbstractCommandAdapter implements Command, Serializable {
 	 * 
 	 * @param context context to be handle
 	 */
-	protected void doPostprocess(Context context) {
+	protected void doPostprocess(CommandContext context) {
 		// do nothing
 	}
 }

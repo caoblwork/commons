@@ -18,11 +18,13 @@ package com.github.yingzhuo.commons.functor;
 
 import java.util.Iterator;
 
+import com.github.yingzhuo.commons.exception.FunctorException;
+
 
 /**
  * <p>A {@link Chain} represents a configured list of
  * {@link Command}s that will be executed in order to perform processing
- * on a specified {@link Context}.  Each included {@link Command} will be
+ * on a specified {@link CommandContext}.  Each included {@link Command} will be
  * executed in turn, until either one of them returns <code>true</code>,
  * one of the executed {@link Command}s throws an exception,
  * or the end of the chain has been reached.  The {@link Chain} itself will
@@ -85,42 +87,40 @@ public interface Chain extends Command, Iterable<Command> {
      *     or throws an exception.</li>
      * <li>Walk backwards through the {@link Command}s whose
      *     <code>execute()</code> methods, starting with the last one that
-     *     was executed.  If this {@link Command} instance is also a
-     *     {@link Filter}, call its <code>postprocess()</code> method,
-     *     discarding any exception that is thrown.</li>
+     *     was executed. 
      * <li>If the last {@link Command} whose <code>execute()</code> method
      *     was called threw an exception, rethrow that exception.</li>
      * <li>Otherwise, return the value returned by the <code>execute()</code>
      *     method of the last {@link Command} that was executed.  This will be
      *     <code>true</code> if the last {@link Command} indicated that
-     *     processing of this {@link Context} has been completed, or
+     *     processing of this {@link CommandContext} has been completed, or
      *     <code>false</code> if none of the called {@link Command}s
      *     returned <code>true</code>.</li>
      * </ul>
      *
-     * @param context The {@link Context} to be processed by this
+     * @param context The {@link CommandContext} to be processed by this
      *  {@link Chain}
      *
-     * @exception Exception if thrown by one of the {@link Command}s
+     * @exception FunctorException if thrown by one of the {@link Command}s
      *  in this {@link Chain} but not handled by a <code>postprocess()</code>
-     *  method of a {@link Filter}
+     *
      * @exception IllegalArgumentException if <code>context</code>
      *  is <code>null</code>
      *
-     * @return <code>true</code> if the processing of this {@link Context}
+     * @return <code>true</code> if the processing of this {@link CommandContext}
      *  has been completed, or <code>false</code> if the processing
-     *  of this {@link Context} should be delegated to a subsequent
+     *  of this {@link CommandContext} should be delegated to a subsequent
      *  {@link Command} in an enclosing {@link Chain}
      */
-    boolean execute(Context context) throws Exception;
+    boolean execute(CommandContext context) throws FunctorException;
     
     /**
      * <p>Execute any cleanup activities, such as releasing resources that
      * were acquired during the <code>execute()</code> method of this
-     * {@link Filter} instance.</p>
+     * {@link Command} instance.</p>
      *
-     * @param context The {@link Context} to be processed by this
-     *  {@link Filter}
+     * @param context The {@link CommandContext} to be processed by this
+     *  {@link Command}
      * @param exception The <code>Exception</code> (if any) that was thrown
      *  by the last {@link Command} that was executed; otherwise
      *  <code>null</code>
@@ -132,7 +132,7 @@ public interface Chain extends Command, Iterable<Command> {
      *  method (and therefore need not be rethrown), return <code>true</code>;
      *  otherwise return <code>false</code>
      */
-    boolean postprocess(Context context, Exception exception);
+    boolean postprocess(CommandContext context, Exception exception);
 
     /**
      * Returns an iterator over a set of Command's instances.

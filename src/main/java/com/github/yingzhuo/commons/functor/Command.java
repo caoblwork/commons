@@ -16,11 +16,13 @@
  */
 package com.github.yingzhuo.commons.functor;
 
+import com.github.yingzhuo.commons.exception.FunctorException;
+
 
 /**
  * <p>A {@link Command} encapsulates a unit of processing work to be
  * performed, whose purpose is to examine and/or modify the state of a
- * transaction that is represented by a {@link Context}.  Individual
+ * transaction that is represented by a {@link CommandContext}.  Individual
  * {@link Command}s can be assembled into a {@link Chain}, which allows
  * them to either complete the required processing or delegate further
  * processing to the next {@link Command} in the {@link Chain}.</p>
@@ -30,11 +32,11 @@ package com.github.yingzhuo.commons.functor;
  * processed by different threads simultaneously.  In general, this implies
  * that {@link Command} classes should not maintain state information in
  * instance variables.  Instead, state information should be maintained via
- * suitable modifications to the attributes of the {@link Context} that is
+ * suitable modifications to the attributes of the {@link CommandContext} that is
  * passed to the <code>execute()</code> command.</p>
  *
  * <p>{@link Command} implementations typically retrieve and store state
- * information in the {@link Context} instance that is passed as a parameter
+ * information in the {@link CommandContext} instance that is passed as a parameter
  * to the <code>execute()</code> method, using particular keys into the
  * <code>Map</code> that can be acquired via
  * <code>Context.getAttributes()</code>.  To improve interoperability of
@@ -79,21 +81,20 @@ public interface Command {
 
     /**
      * <p>Commands should return <code>CONTINUE_PROCESSING</code> if the processing
-     *  of the given {@link Context} should be delegated to a subsequent
+     *  of the given {@link CommandContext} should be delegated to a subsequent
      *  {@link Command} in an enclosing {@link Chain}.</p>
      *
-     * @since Chain 1.1
      */
     public static final boolean CONTINUE_PROCESSING = false;
 
     /**
      * <p>Commands should return <code>PROCESSING_COMPLETE</code>
-     * if the processing of the given {@link Context}
+     * if the processing of the given {@link CommandContext}
      *  has been completed.</p>
      *
-     * @since Chain 1.1
      */
     public static final boolean PROCESSING_COMPLETE = true;
+
     /**
      * <p>Execute a unit of processing work to be performed.  This
      * {@link Command} may either complete the required processing
@@ -101,29 +102,29 @@ public interface Command {
      * to the next {@link Command} in a {@link Chain} containing this
      * {@link Command} by returning <code>false</code>
      *
-     * @param context The {@link Context} to be processed by this
+     * @param context The {@link CommandContext} to be processed by this
      *  {@link Command}
      *
-     * @exception Exception general purpose exception return
+     * @exception FunctorException general purpose exception return
      *  to indicate abnormal termination
      * @exception IllegalArgumentException if <code>context</code>
      *  is <code>null</code>
      *
-     * @return <code>true</code> if the processing of this {@link Context}
+     * @return <code>true</code> if the processing of this {@link CommandContext}
      *  has been completed, or <code>false</code> if the processing
-     *  of this {@link Context} should be delegated to a subsequent
+     *  of this {@link CommandContext} should be delegated to a subsequent
      *  {@link Command} in an enclosing {@link Chain}
      */
-    boolean execute(Context context) throws Exception;
+    boolean execute(CommandContext context) throws FunctorException;
     
     
     /**
      * <p>Execute any cleanup activities, such as releasing resources that
      * were acquired during the <code>execute()</code> method of this
-     * {@link Filter} instance.</p>
+     * {@link Command} instance.</p>
      *
-     * @param context The {@link Context} to be processed by this
-     *  {@link Filter}
+     * @param context The {@link CommandContext} to be processed by this
+     *  {@link Command}
      * @param exception The <code>Exception</code> (if any) that was thrown
      *  by the last {@link Command} that was executed; otherwise
      *  <code>null</code>
@@ -135,7 +136,7 @@ public interface Command {
      *  method (and therefore need not be rethrown), return <code>true</code>;
      *  otherwise return <code>false</code>
      */
-    boolean postprocess(Context context, Exception exception);
+    boolean postprocess(CommandContext context, Exception exception);
 
 
 }

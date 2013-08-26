@@ -20,13 +20,13 @@ package com.github.yingzhuo.commons.functor.chain;
 import java.util.Hashtable;
 import java.util.Map;
 
-import com.github.yingzhuo.commons.functor.Context;
+import com.github.yingzhuo.commons.functor.CommandContext;
 
 
 /**
- * <p>Convenience base class for {@link Context} implementations.</p>
+ * <p>Convenience base class for {@link CommandContext} implementations.</p>
  *
- * <p>In addition to the minimal functionality required by the {@link Context}
+ * <p>In addition to the minimal functionality required by the {@link CommandContext}
  * interface, this class implements the recommended support for
  * <em>Attribute-Property Transparency</em>. This is implemented by
  * analyzing the available JavaBeans properties of this class (or its
@@ -41,7 +41,7 @@ import com.github.yingzhuo.commons.functor.Context;
  * @version $Revision: 499247 $ $Date: 2007-01-24 04:09:44 +0000 (Wed, 24 Jan 2007) $
  */
 
-public class DefaultContext extends Hashtable<String, Object> implements Context {
+public class DefaultCommandContext extends Hashtable<String, Object> implements CommandContext {
 
     // ------------------------------------------------------------ Constructors
 
@@ -53,13 +53,13 @@ public class DefaultContext extends Hashtable<String, Object> implements Context
 	/**
      * Default, no argument constructor.
      */
-    public DefaultContext() {
+    public DefaultCommandContext() {
         super();
     }
 
 
     /**
-     * <p>Initialize the contents of this {@link Context} by copying the
+     * <p>Initialize the contents of this {@link CommandContext} by copying the
      * values from the specified <code>Map</code>.  Any keys in <code>map</code>
      * that correspond to local properties will cause the setter method for
      * that property to be called.</p>
@@ -71,7 +71,7 @@ public class DefaultContext extends Hashtable<String, Object> implements Context
      * @exception UnsupportedOperationException if a local property does not
      *  have a write method.
      */
-    public DefaultContext(Map<String, Object> map) {
+    public DefaultCommandContext(Map<String, Object> map) {
         super(map);
         putAll(map);
     }

@@ -21,10 +21,10 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-
+import com.github.yingzhuo.commons.exception.FunctorException;
 import com.github.yingzhuo.commons.functor.Chain;
 import com.github.yingzhuo.commons.functor.Command;
-import com.github.yingzhuo.commons.functor.Context;
+import com.github.yingzhuo.commons.functor.CommandContext;
 import com.github.yingzhuo.commons.lang.Validate;
 
 
@@ -70,7 +70,6 @@ public class DefaultChain implements Chain {
      *  is <code>null</code>
      */
     public DefaultChain(Command[] commands) {
-//    	Validate.notNull(commands);
     	Validate.noNullElements(commands);
         for (int i = 0; i < commands.length; i++) {
             addCommand(commands[i]);
@@ -141,21 +140,20 @@ public class DefaultChain implements Chain {
     /**
      * See the {@link Chain} JavaDoc.
      *
-     * @param context The {@link Context} to be processed by this
+     * @param context The {@link CommandContext} to be processed by this
      *  {@link Chain}
      *
      * @throws Exception if thrown by one of the {@link Command}s
      *  in this {@link Chain} but not handled by a <code>postprocess()</code>
-     *  method of a {@link Filter}
      * @throws IllegalArgumentException if <code>context</code>
      *  is <code>null</code>
      *
-     * @return <code>true</code> if the processing of this {@link Context}
+     * @return <code>true</code> if the processing of this {@link CommandContext}
      *  has been completed, or <code>false</code> if the processing
-     *  of this {@link Context} should be delegated to a subsequent
+     *  of this {@link CommandContext} should be delegated to a subsequent
      *  {@link Command} in an enclosing {@link Chain}
      */
-    public boolean execute(Context context) throws Exception {
+    public boolean execute(CommandContext context) throws FunctorException {
 
         // Verify our parameters
         if (context == null) {
@@ -183,7 +181,7 @@ public class DefaultChain implements Chain {
             }
         }
 
-        // Call postprocess methods on Filters in reverse order
+        // Call postprocess methods on Commands in reverse order
         if (i >= n) { // Fell off the end of the chain
             i--;
         }
@@ -204,7 +202,7 @@ public class DefaultChain implements Chain {
 
         // Return the exception or result state from the last execute()
         if ((saveException != null) && !handled) {
-            throw saveException;
+            throw new FunctorException(saveException);
         } else {
             return (saveResult);
         }
@@ -222,7 +220,7 @@ public class DefaultChain implements Chain {
         return (commands);
     }
 
-	public boolean postprocess(Context context, Exception exception) {
+	public boolean postprocess(CommandContext context, Exception exception) {
 		boolean handled = false;
 		for (int i = commands.length - 1; i >= 0; i--) {
 			boolean b = commands[i].postprocess(context, exception);
