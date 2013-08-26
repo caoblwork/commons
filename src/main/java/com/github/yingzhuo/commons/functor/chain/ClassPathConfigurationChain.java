@@ -82,11 +82,11 @@ public class ClassPathConfigurationChain extends DefaultChain implements Chain, 
 			iterator = IOUtils.lineIterator(in, encoding);
 			
 			while (iterator.hasNext()) {
-				String className = iterator.next();
-				if (StringUtils.isBlank(className)) {
+				String className = StringUtils.trimToEmpty(iterator.next());
+				if (StringUtils.isBlank(className) || StringUtils.startsWith(className, "#")) {
 					continue;
 				}
-				
+
 				Class<Command> klass = (Class<Command>) Class.forName(className);
 				Command command = ConstructorUtils.invokeConstructor(klass);
 				addCommand(command);
