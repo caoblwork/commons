@@ -44,6 +44,7 @@ import com.github.yingzhuo.commons.reflect.ConstructorUtils;
  * my.pkg.Command1
  * my.pkg.Command2
  * my.pkg.Command3
+ * # this is comment line.
  * my.pkg.Command4
  * </pre>
  * </code>
