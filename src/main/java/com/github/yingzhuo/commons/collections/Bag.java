@@ -49,7 +49,7 @@ public interface Bag<E> extends Collection<E> {
      * @param object  the object to search for
      * @return the number of occurrences of the object, zero if not found
      */
-    int getCount(E object);
+    int getCount(Object object);
 
     /**
      * <i>(Violation)</i>
