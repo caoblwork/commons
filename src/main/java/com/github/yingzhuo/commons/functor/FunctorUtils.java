@@ -34,7 +34,9 @@ import com.github.yingzhuo.commons.functor.predicate.OrPredicate;
 import com.github.yingzhuo.commons.functor.predicate.TruePredicate;
 import com.github.yingzhuo.commons.functor.predicate.XorPredicate;
 import com.github.yingzhuo.commons.functor.transformer.ChainedTransformer;
+import com.github.yingzhuo.commons.functor.transformer.IfTransformer;
 import com.github.yingzhuo.commons.functor.transformer.NOPTransformer;
+import com.github.yingzhuo.commons.functor.transformer.SwitchTransformer;
 import com.github.yingzhuo.commons.lang.tuple.Pair;
 
 @SuppressWarnings("unchecked")
@@ -138,6 +140,17 @@ public final class FunctorUtils {
 			return ChainedTransformer.getInstance(transformers);
 		}
 
+		public static <T> Transformer<T> ifElse(Predicate<T> predicate, Transformer<T> trueTransformer, Transformer<T> falseTransformer) {
+			if (falseTransformer == null) {
+				return IfTransformer.getInstance(predicate, trueTransformer);
+			} else {
+				return IfTransformer.getInstance(predicate, trueTransformer, falseTransformer);
+			}
+		}
+
+		public static <T> Transformer<T> switchDefault(Transformer<T> defaultTransformer, Pair<Predicate<T>, Transformer<T>>... pairs) {
+			return SwitchTransformer.getInstance(defaultTransformer, pairs);
+		}
 	}
 
 }

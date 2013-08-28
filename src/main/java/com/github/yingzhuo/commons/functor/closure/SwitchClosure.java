@@ -51,11 +51,11 @@ public class SwitchClosure<T> implements Closure<T>, Serializable {
      * null key. The ordering is that of the iterator() method on the entryset 
      * collection of the map.
      * 
-     * @param predicatesAndClosures  a map of predicates to closures
+     * @param defaultClosure  the closure to use if no match, null means nop
+     * @param pairs the pairs  of predicates and transformers
      * @return the <code>switch</code> closure
      * @throws IllegalArgumentException if the map is null
      * @throws IllegalArgumentException if any closure in the map is null
-     * @throws ClassCastException  if the map elements are of the wrong type
      */
 	public static <T> Closure<T> getInstance(Closure<T> defaultClosure, Pair<Predicate<T>, Closure<T>>...pairs) {
         return new SwitchClosure(defaultClosure, pairs);

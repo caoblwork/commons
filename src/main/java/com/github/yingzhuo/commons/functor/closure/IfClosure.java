@@ -20,14 +20,12 @@ import java.io.Serializable;
 
 import com.github.yingzhuo.commons.functor.Closure;
 import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.lang.Validate;
 
 
 /**
  * Closure implementation acts as an if statement calling one or other closure
  * based on a predicate.
- * 
- * @author Stephen Colebourne
- * @author Matt Benson
  */
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class IfClosure<T> implements Closure<T>, Serializable {
@@ -49,7 +47,6 @@ public class IfClosure<T> implements Closure<T>, Serializable {
      * @param trueClosure  closure used if true
      * @return the <code>if</code> closure
      * @throws IllegalArgumentException if either argument is null
-     * @since Commons Collections 3.2
      */
     public static <T> Closure<T> getInstance(Predicate<T> predicate, Closure<T> trueClosure) {
         return getInstance(predicate, trueClosure, NOPClosure.INSTANCE);
@@ -65,12 +62,9 @@ public class IfClosure<T> implements Closure<T>, Serializable {
      * @throws IllegalArgumentException if any argument is null
      */
 	public static <T> Closure<T> getInstance(Predicate<T> predicate, Closure<T> trueClosure, Closure<T> falseClosure) {
-        if (predicate == null) {
-            throw new IllegalArgumentException("Predicate must not be null");
-        }
-        if (trueClosure == null || falseClosure == null) {
-            throw new IllegalArgumentException("Closures must not be null");
-        }
+        Validate.notNull(predicate);
+        Validate.notNull(trueClosure);
+        Validate.notNull(falseClosure);
         return new IfClosure(predicate, trueClosure, falseClosure);
     }
 
@@ -120,7 +114,6 @@ public class IfClosure<T> implements Closure<T>, Serializable {
      * Gets the predicate.
      * 
      * @return the predicate
-     * @since Commons Collections 3.1
      */
     public Predicate<T> getPredicate() {
         return iPredicate;
@@ -130,7 +123,6 @@ public class IfClosure<T> implements Closure<T>, Serializable {
      * Gets the closure called when true.
      * 
      * @return the closure
-     * @since Commons Collections 3.1
      */
     public Closure<T> getTrueClosure() {
         return iTrueClosure;
@@ -140,7 +132,6 @@ public class IfClosure<T> implements Closure<T>, Serializable {
      * Gets the closure called when false.
      * 
      * @return the closure
-     * @since Commons Collections 3.1
      */
     public Closure<T> getFalseClosure() {
         return iFalseClosure;

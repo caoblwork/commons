@@ -29,8 +29,6 @@ package com.github.yingzhuo.commons.functor;
  * {@link TransformerUtils}. These include method invokation, returning a constant,
  * cloning and returning the string value.
  * 
- * @author James Strachan
- * @author Stephen Colebourne
  */
 public interface Transformer<T> {
 
