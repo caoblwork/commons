@@ -84,7 +84,7 @@ public class ComparableComparator implements Comparator, Serializable {
      * @since Commons Collections 3.0
      */
     public int hashCode() {
-        return "ComparableComparator".hashCode();
+        return getClass().getName().hashCode();
     }
 
     /**
