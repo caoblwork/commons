@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
 import com.github.yingzhuo.commons.io.FileUtils;
 
 /**
@@ -49,7 +50,7 @@ import com.github.yingzhuo.commons.io.FileUtils;
  * @version $Id: SizeFileComparator.java 1307462 2012-03-30 15:13:11Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Size comparator instance - directories are treated as zero size */

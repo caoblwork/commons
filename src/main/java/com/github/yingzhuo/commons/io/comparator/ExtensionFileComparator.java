@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
 import com.github.yingzhuo.commons.io.FilenameUtils;
 import com.github.yingzhuo.commons.io.IOCase;
 
@@ -51,7 +52,7 @@ import com.github.yingzhuo.commons.io.IOCase;
  * @version $Id: ExtensionFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class ExtensionFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive extension comparator instance (see {@link IOCase#SENSITIVE}) */

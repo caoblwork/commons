@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
 import com.github.yingzhuo.commons.io.IOCase;
 
 /**
@@ -49,7 +50,7 @@ import com.github.yingzhuo.commons.io.IOCase;
  * @version $Id: PathFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */

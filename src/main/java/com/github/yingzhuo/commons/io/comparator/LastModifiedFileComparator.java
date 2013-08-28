@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+
 /**
  * Compare the <b>last modified date/time</b> of two files for order 
  * (see {@link File#lastModified()}).
@@ -45,7 +47,7 @@ import java.util.Comparator;
  * @version $Id: LastModifiedFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class LastModifiedFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Last modified comparator instance */

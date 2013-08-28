@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+
 /**
  * Compare two files using the {@link File#isDirectory()} method.
  * <p>
@@ -43,7 +45,7 @@ import java.util.Comparator;
  * @version $Id: DirectoryFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 2.0
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Singleton default comparator instance */

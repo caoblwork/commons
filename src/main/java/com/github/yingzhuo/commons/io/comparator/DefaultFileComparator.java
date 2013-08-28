@@ -20,6 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+
 /**
  * Compare two files using the <b>default</b> {@link File#compareTo(File)} method.
  * <p>
@@ -44,14 +46,14 @@ import java.util.Comparator;
  * @version $Id: DefaultFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
 public class DefaultFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Singleton default comparator instance */
     public static final Comparator<File> DEFAULT_COMPARATOR = new DefaultFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
+	public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#compareTo(File)} method.

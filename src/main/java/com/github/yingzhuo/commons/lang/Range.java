@@ -19,6 +19,8 @@ package com.github.yingzhuo.commons.lang;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.functor.comparator.ComparableComparator;
+
 /**
  * <p>An immutable range of objects from a minimum to maximum point inclusive.</p>
  * 
@@ -470,22 +472,6 @@ public final class Range<T> implements Serializable {
      */
     public String toString(String format) {
         return String.format(format, minimum, maximum, comparator);
-    }
-
-    //-----------------------------------------------------------------------
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private enum ComparableComparator implements Comparator {
-        INSTANCE;
-        /**
-         * Comparable based compare implementation. 
-         *
-         * @param obj1 left hand side of comparison
-         * @param obj2 right hand side of comparison
-         * @return negative, 0, positive comparison value
-         */
-        public int compare(Object obj1, Object obj2) {
-            return ((Comparable) obj1).compareTo(obj2);
-        }
     }
 
 }
