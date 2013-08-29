@@ -30,6 +30,7 @@ import com.github.yingzhuo.commons.functor.predicate.FalsePredicate;
 import com.github.yingzhuo.commons.functor.predicate.NonePredicate;
 import com.github.yingzhuo.commons.functor.predicate.NotNullPredicate;
 import com.github.yingzhuo.commons.functor.predicate.NotPredicate;
+import com.github.yingzhuo.commons.functor.predicate.OnePredicate;
 import com.github.yingzhuo.commons.functor.predicate.OrPredicate;
 import com.github.yingzhuo.commons.functor.predicate.TruePredicate;
 import com.github.yingzhuo.commons.functor.predicate.XorPredicate;
@@ -125,6 +126,10 @@ public final class FunctorUtils {
 
 		public static <T> Predicate<T> none(Predicate<T>... predicates) {
 			return NonePredicate.getInstance(predicates);
+		}
+		
+		public static <T> Predicate<T> one(Predicate<T>... predicates) {
+			return OnePredicate.getInstance(predicates);
 		}
 	}
 	

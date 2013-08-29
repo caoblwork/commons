@@ -35,11 +35,6 @@ import com.github.yingzhuo.commons.lang.Validate;
  * implementation it would provide a loophole around the validation.
  * But, you might want that loophole, so this class is kept simple.
  *
- * @since Commons Collections 3.0
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- * 
- * @author Daniel Rall
- * @author Stephen Colebourne
  */
 public abstract class AbstractMapDecorator<K, V> implements Map<K, V> {
 
