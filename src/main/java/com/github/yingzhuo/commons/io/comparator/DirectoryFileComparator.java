@@ -42,17 +42,15 @@ import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
  * </pre>
  * <p>
  *
- * @version $Id: DirectoryFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
- * @since 2.0
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({"serial" })
 public class DirectoryFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Singleton default comparator instance */
     public static final Comparator<File> DIRECTORY_COMPARATOR = new DirectoryFileComparator();
 
     /** Singleton reverse default comparator instance */
-    public static final Comparator<File> DIRECTORY_REVERSE = new ReverseComparator(DIRECTORY_COMPARATOR);
+    public static final Comparator<File> DIRECTORY_REVERSE = ReverseComparator.decorate(DIRECTORY_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#isDirectory()} method.

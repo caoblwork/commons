@@ -27,15 +27,6 @@ import java.util.Comparator;
  * for enforcing the natural order in custom implementations
  * of SortedSet and SortedMap.
  * <p />
- * Note: In the 2.0 and 2.1 releases of Commons Collections, 
- * this class would throw a {@link ClassCastException} if
- * either of the arguments to {@link #compare(Object, Object) compare}
- * were <code>null</code>, not {@link Comparable Comparable},
- * or for which {@link Comparable#compareTo(Object) compareTo} gave
- * inconsistent results.  This is no longer the case.  See
- * {@link #compare(Object, Object) compare} for details.
- *
- * @see java.util.Collections#reverseOrder()
  */
 @SuppressWarnings("rawtypes")
 public class ComparableComparator implements Comparator, Serializable {
@@ -70,9 +61,9 @@ public class ComparableComparator implements Comparator, Serializable {
      * @throws ClassCastException when <i>obj1</i> is not a <code>Comparable</code>,
      *         or when <code>((Comparable)obj1).compareTo(obj2)</code> does
      */
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public int compare(Object obj1, Object obj2) {
-        return ((Comparable)obj1).compareTo(obj2);
+        return ((Comparable) obj1).compareTo((Comparable)obj2);
     }
 
     //-----------------------------------------------------------------------
@@ -81,7 +72,6 @@ public class ComparableComparator implements Comparator, Serializable {
      * {@link #equals(Object) equals}.
      *
      * @return a hash code for this comparator.
-     * @since Commons Collections 3.0
      */
     public int hashCode() {
         return getClass().getName().hashCode();
@@ -100,7 +90,6 @@ public class ComparableComparator implements Comparator, Serializable {
      * 
      * @param object  the object to compare with
      * @return true if equal
-     * @since Commons Collections 3.0
      */
     public boolean equals(Object object) {
         return (this == object) || 

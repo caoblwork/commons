@@ -16,12 +16,21 @@
  */
 package com.github.yingzhuo.commons.functor;
 
+import java.util.Collection;
+import java.util.Comparator;
+
 import com.github.yingzhuo.commons.functor.closure.ChainedClosure;
 import com.github.yingzhuo.commons.functor.closure.ForClosure;
 import com.github.yingzhuo.commons.functor.closure.IfClosure;
 import com.github.yingzhuo.commons.functor.closure.NOPClosure;
 import com.github.yingzhuo.commons.functor.closure.SwitchClosure;
 import com.github.yingzhuo.commons.functor.closure.WhileClosure;
+import com.github.yingzhuo.commons.functor.comparator.BooleanComparator;
+import com.github.yingzhuo.commons.functor.comparator.ComparableComparator;
+import com.github.yingzhuo.commons.functor.comparator.ComparatorChain;
+import com.github.yingzhuo.commons.functor.comparator.NullComparator;
+import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+import com.github.yingzhuo.commons.functor.comparator.TransformingComparator;
 import com.github.yingzhuo.commons.functor.predicate.AllPredicate;
 import com.github.yingzhuo.commons.functor.predicate.AndPredicate;
 import com.github.yingzhuo.commons.functor.predicate.AnyPredicate;
@@ -38,6 +47,7 @@ import com.github.yingzhuo.commons.functor.transformer.ChainedTransformer;
 import com.github.yingzhuo.commons.functor.transformer.IfTransformer;
 import com.github.yingzhuo.commons.functor.transformer.NOPTransformer;
 import com.github.yingzhuo.commons.functor.transformer.SwitchTransformer;
+import com.github.yingzhuo.commons.lang.Validate;
 import com.github.yingzhuo.commons.lang.tuple.Pair;
 
 @SuppressWarnings("unchecked")
@@ -158,4 +168,54 @@ public final class FunctorUtils {
 		}
 	}
 
+	// COMPARATOR
+	// -----------------------------------------------------------------------------------------------------------------------
+	public static final class COMPARATOR {
+
+		public static <T> Comparator<T> naturalComparator(Class<? extends Comparator<T>> klass) {
+	    	return ComparableComparator.INSTANCE;
+	    }
+
+		public static <T> Comparator<T> chainedComparator(Comparator<T> comparator1, Comparator<T> comparator2) {
+	        return chainedComparator(new Comparator[] {comparator1, comparator2});
+	    }
+
+	    public static <T> Comparator<T> chainedComparator(Comparator<T>[] comparators) {
+	        ComparatorChain<T> chain = new ComparatorChain<T>();
+	        for (int i = 0; i < comparators.length; i++) {
+	            if (comparators[i] == null) {
+	                throw new NullPointerException("Comparator cannot be null");
+	            }
+	            chain.addComparator(comparators[i]);
+	        }
+	        return chain;
+	    }
+
+		public static <T> Comparator<T> chainedComparator(Collection<Comparator<T>> comparators) {
+	        return chainedComparator(
+	            (Comparator[]) comparators.toArray(new Comparator[comparators.size()])
+	        );
+	    }
+
+		public static <T> Comparator<T> reversedComparator(Comparator<T> comparator) {
+	        return ReverseComparator.decorate(comparator);
+	    }
+
+		public static <T> Comparator<T> booleanComparator(boolean trueFirst) {
+	        return (Comparator<T>) BooleanComparator.getBooleanComparator(trueFirst);
+	    }
+	    
+		public static <T> Comparator<T> nullLowComparator(Comparator<T> comparator) {
+	        Validate.notNull(comparator);
+	        return NullComparator.decorate(comparator, false);
+	    }
+
+	    public static <T> Comparator<T> nullHighComparator(Comparator<T> comparator) {
+	        return NullComparator.decorate(comparator, true);
+	    }
+
+		public static <T> Comparator<T> transformedComparator(Comparator<T> comparator, Transformer<T> transformer) {
+	        return TransformingComparator.decorate(transformer, comparator);
+	    }
+	}
 }

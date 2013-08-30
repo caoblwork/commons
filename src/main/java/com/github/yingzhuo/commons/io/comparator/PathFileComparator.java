@@ -50,26 +50,26 @@ import com.github.yingzhuo.commons.io.IOCase;
  * @version $Id: PathFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({ "serial" })
 public class PathFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> PATH_COMPARATOR = new PathFileComparator();
 
     /** Reverse case-sensitive path comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> PATH_REVERSE = new ReverseComparator(PATH_COMPARATOR);
+    public static final Comparator<File> PATH_REVERSE = ReverseComparator.decorate(PATH_COMPARATOR);
 
     /** Case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
     public static final Comparator<File> PATH_INSENSITIVE_COMPARATOR = new PathFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive path comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> PATH_INSENSITIVE_REVERSE = new ReverseComparator(PATH_INSENSITIVE_COMPARATOR);
+    public static final Comparator<File> PATH_INSENSITIVE_REVERSE = ReverseComparator.decorate(PATH_INSENSITIVE_COMPARATOR);
 
     /** System sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
     public static final Comparator<File> PATH_SYSTEM_COMPARATOR = new PathFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive path comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> PATH_SYSTEM_REVERSE = new ReverseComparator(PATH_SYSTEM_COMPARATOR);
+    public static final Comparator<File> PATH_SYSTEM_REVERSE = ReverseComparator.decorate(PATH_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;

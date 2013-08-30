@@ -19,15 +19,11 @@ package com.github.yingzhuo.commons.functor.comparator;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.github.yingzhuo.commons.lang.Validate;
+
 /**
  * Reverses the order of another comparator by reversing the arguments
  * to its {@link #compare(Object, Object) compare} method.
- * 
- * @since Commons Collections 2.0
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- *
- * @author Henri Yandell
- * @author Michael A. Smith
  * 
  * @see java.util.Collections#reverseOrder()
  */
@@ -38,20 +34,18 @@ public class ReverseComparator<T> implements Comparator<T>, Serializable {
 
     /** The comparator being decorated. */
     private Comparator<T> comparator;
-
+    
     //-----------------------------------------------------------------------
     /**
-     * Creates a comparator that compares objects based on the inverse of their
-     * natural ordering.  Using this Constructor will create a ReverseComparator
-     * that is functionally identical to the Comparator returned by
-     * java.util.Collections.<b>reverseOrder()</b>.
+     * Factory method to create instance of decorated comparator
      * 
-     * @see java.util.Collections#reverseOrder()
+     * @param comparator  the comparator to decorate
      */
-    public ReverseComparator() {
-        this(null);
+    public static<T> Comparator<T> decorate(Comparator<T> comparator) {
+    	return new ReverseComparator<T>(comparator);
     }
 
+    //-----------------------------------------------------------------------
     /**
      * Creates a comparator that inverts the comparison
      * of the given comparator.  If you pass in <code>null</code>,
@@ -61,13 +55,9 @@ public class ReverseComparator<T> implements Comparator<T>, Serializable {
      * 
      * @param comparator Comparator to reverse
      */
-    @SuppressWarnings("unchecked")
 	public ReverseComparator(Comparator<T> comparator) {
-        if(comparator != null) {
-            this.comparator = comparator;
-        } else {
-            this.comparator = ComparableComparator.INSTANCE;
-        }
+		Validate.notNull(comparator);
+		this.comparator = comparator;
     }
 
     //-----------------------------------------------------------------------

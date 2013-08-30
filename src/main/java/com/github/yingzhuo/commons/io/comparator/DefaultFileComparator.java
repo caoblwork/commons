@@ -46,14 +46,14 @@ import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
  * @version $Id: DefaultFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({ "serial" })
 public class DefaultFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Singleton default comparator instance */
     public static final Comparator<File> DEFAULT_COMPARATOR = new DefaultFileComparator();
 
     /** Singleton reverse default comparator instance */
-	public static final Comparator<File> DEFAULT_REVERSE = new ReverseComparator(DEFAULT_COMPARATOR);
+	public static final Comparator<File> DEFAULT_REVERSE = ReverseComparator.decorate(DEFAULT_COMPARATOR);
 
     /**
      * Compare the two files using the {@link File#compareTo(File)} method.

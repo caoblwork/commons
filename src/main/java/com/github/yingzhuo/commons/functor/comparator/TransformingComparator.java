@@ -37,25 +37,19 @@ public class TransformingComparator<T> implements Comparator<T> {
     protected Transformer<T> transformer;
 
     //-----------------------------------------------------------------------
-    /**
-     * Constructs an instance with the given Transformer and a 
-     * {@link ComparableComparator ComparableComparator}.
-     * 
-     * @param transformer what will transform the arguments to <code>compare</code>
-     */
-    @SuppressWarnings("unchecked")
-	public TransformingComparator(Transformer<T> transformer) {
-        this(transformer, ComparableComparator.INSTANCE);
+    public static <T> Comparator<T> decorate(Transformer<T> transformer, Comparator<T> comparator) {
+    	return new TransformingComparator<T>(transformer, comparator);
     }
-
+    
+    //-----------------------------------------------------------------------
     /**
      * Constructs an instance with the given Transformer and Comparator.
      * 
      * @param transformer  what will transform the arguments to <code>compare</code>
-     * @param decorated  the decorated Comparator
+     * @param comparator  the decorated Comparator
      */
-    public TransformingComparator(Transformer<T> transformer, Comparator<T> decorated) {
-        this.decorated = decorated;
+    private TransformingComparator(Transformer<T> transformer, Comparator<T> comparator) {
+        this.decorated = comparator;
         this.transformer = transformer;
     }
 

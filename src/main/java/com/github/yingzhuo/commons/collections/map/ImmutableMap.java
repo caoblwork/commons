@@ -27,7 +27,6 @@ import java.util.Set;
 import com.github.yingzhuo.commons.collections.IterableMap;
 import com.github.yingzhuo.commons.collections.collection.ImmutableCollection;
 import com.github.yingzhuo.commons.collections.iterator.EntrySetMapIterator;
-import com.github.yingzhuo.commons.collections.iterator.ImmutableIterator;
 import com.github.yingzhuo.commons.collections.iterator.ImmutableMapIterator;
 import com.github.yingzhuo.commons.collections.iterator.MapIterator;
 import com.github.yingzhuo.commons.collections.set.ImmutableSet;
@@ -117,7 +116,7 @@ public final class ImmutableMap<K, V>
             return ImmutableMapIterator.decorate(it);
         } else {
             MapIterator<K, V> it = new EntrySetMapIterator(map);
-            return (MapIterator<K, V>) ImmutableIterator.decorate(it);
+            return ImmutableMapIterator.decorate(it);
         }
     }
 

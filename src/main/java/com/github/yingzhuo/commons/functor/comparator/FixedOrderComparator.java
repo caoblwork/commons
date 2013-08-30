@@ -41,12 +41,6 @@ import java.util.Map;
  * thread-safe at construction time, but it is thread-safe to perform
  * multiple comparisons  after all the setup operations are complete.
  * 
- * @since Commons Collections 3.0
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- *
- * @author David Leppik
- * @author Stephen Colebourne
- * @author Janek Bogucki
  */
 public class FixedOrderComparator<T> implements Comparator<T> {
 

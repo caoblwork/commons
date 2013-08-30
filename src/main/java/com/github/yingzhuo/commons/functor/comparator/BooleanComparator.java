@@ -58,11 +58,11 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
      */
     public static final BooleanComparator FALSE_FIRST = new BooleanComparator(false);
 
-    /** <code>true</code> iff <code>true</code> values sort before <code>false</code> values. */
+    /** <code>true</code> if <code>true</code> values sort before <code>false</code> values. */
     private boolean trueFirst = false;
 
     //-----------------------------------------------------------------------
-        
+
     /**
      * Returns a BooleanComparator instance that sorts 
      * <code><i>trueFirst</i></code> values before 
@@ -83,18 +83,6 @@ public final class BooleanComparator implements Comparator<Boolean>, Serializabl
     }
 
     //-----------------------------------------------------------------------
-    /**
-     * Creates a <code>BooleanComparator</code> that sorts
-     * <code>false</code> values before <code>true</code> values.
-     * <p>
-     * Equivalent to {@link #BooleanComparator(boolean) BooleanComparator(false)}.
-     * <p>
-     * Please use the static factory instead whenever possible.
-     */
-    public BooleanComparator() {
-        this(false);
-    }
-
     /**
      * Creates a <code>BooleanComparator</code> that sorts
      * <code><i>trueFirst</i></code> values before 

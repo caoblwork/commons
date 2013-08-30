@@ -22,11 +22,6 @@ import java.util.Comparator;
 /**
  * A Comparator that will compare nulls to be either lower or higher than
  * other objects.
- *
- * @since Commons Collections 2.0
- * @version $Revision: 647116 $ $Date: 2008-04-11 12:23:08 +0100 (Fri, 11 Apr 2008) $ 
- *
- * @author Michael A. Smith
  */
 public class NullComparator<T> implements Comparator<T>, Serializable {
 
@@ -43,53 +38,24 @@ public class NullComparator<T> implements Comparator<T>, Serializable {
      *  non-<code>null</code> objects.
      **/
     private boolean nullsAreHigh;
-
+    
     //-----------------------------------------------------------------------
     /**
-     *  Construct an instance that sorts <code>null</code> higher than any
-     *  non-<code>null</code> object it is compared with. When comparing two
-     *  non-<code>null</code> objects, the {@link ComparableComparator} is
-     *  used.
-     **/
-    @SuppressWarnings("unchecked")
-	public NullComparator() {
-        this(ComparableComparator.INSTANCE, true);
-    }
-
-    /**
-     *  Construct an instance that sorts <code>null</code> higher than any
-     *  non-<code>null</code> object it is compared with.  When comparing two
-     *  non-<code>null</code> objects, the specified {@link Comparator} is
-     *  used.
-     *
-     *  @param nonNullComparator the comparator to use when comparing two
-     *  non-<code>null</code> objects.  This argument cannot be
-     *  <code>null</code>
-     *
-     *  @exception NullPointerException if <code>nonNullComparator</code> is
-     *  <code>null</code>
-     **/
-    public NullComparator(Comparator<T> nonNullComparator) {
-        this(nonNullComparator, true);
-    }
-
-    /**
-     *  Construct an instance that sorts <code>null</code> higher or lower than
-     *  any non-<code>null</code> object it is compared with.  When comparing
-     *  two non-<code>null</code> objects, the {@link ComparableComparator} is
-     *  used.
-     *
-     *  @param nullsAreHigh a <code>true</code> value indicates that
+     * Factory method to create instance of decorated comparator
+     * 
+     * @param comparator  the comparator to decorate
+     * 
+     * @param nullsAreHigh a <code>true</code> value indicates that
      *  <code>null</code> should be compared as higher than a
      *  non-<code>null</code> object.  A <code>false</code> value indicates
      *  that <code>null</code> should be compared as lower than a
      *  non-<code>null</code> object.
-     **/
-    @SuppressWarnings("unchecked")
-	public NullComparator(boolean nullsAreHigh) {
-        this(ComparableComparator.INSTANCE, nullsAreHigh);
+     */
+    public static <T> Comparator<T> decorate(Comparator<T> comparator, boolean nullsAreHigh) {
+    	return new NullComparator<T>(comparator, nullsAreHigh);
     }
-    
+
+    //-----------------------------------------------------------------------
     /**
      *  Construct an instance that sorts <code>null</code> higher or lower than
      *  any non-<code>null</code> object it is compared with.  When comparing
@@ -109,7 +75,7 @@ public class NullComparator<T> implements Comparator<T>, Serializable {
      *  @exception NullPointerException if <code>nonNullComparator</code> is
      *  <code>null</code>
      **/
-    public NullComparator(Comparator<T> nonNullComparator, boolean nullsAreHigh) {
+    private NullComparator(Comparator<T> nonNullComparator, boolean nullsAreHigh) {
         this.nonNullComparator = nonNullComparator;
         this.nullsAreHigh = nullsAreHigh;
         

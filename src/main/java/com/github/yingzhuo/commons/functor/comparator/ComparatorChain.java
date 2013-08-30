@@ -50,9 +50,6 @@ import java.util.List;
  * it <i>is</i> thread-safe to perform multiple comparisons
  * after all the setup operations are complete.</p>
  * 
- * @since Commons Collections 2.0
- * @author Morgan Delagrange
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  */
 public class ComparatorChain<T> implements Comparator<T>, Serializable {
 

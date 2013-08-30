@@ -47,14 +47,14 @@ import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
  * @version $Id: LastModifiedFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
  * @since 1.4
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({ "serial" })
 public class LastModifiedFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Last modified comparator instance */
     public static final Comparator<File> LASTMODIFIED_COMPARATOR = new LastModifiedFileComparator();
 
     /** Reverse last modified comparator instance */
-    public static final Comparator<File> LASTMODIFIED_REVERSE = new ReverseComparator(LASTMODIFIED_COMPARATOR);
+    public static final Comparator<File> LASTMODIFIED_REVERSE = ReverseComparator.decorate(LASTMODIFIED_COMPARATOR);
 
     /**
      * Compare the last the last modified date/time of two files.

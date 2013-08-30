@@ -47,17 +47,15 @@ import com.github.yingzhuo.commons.io.FileUtils;
  * <strong>N.B.</strong> Directories are treated as <b>zero size</b> unless
  * <code>sumDirectoryContents</code> is {@code true}.
  *
- * @version $Id: SizeFileComparator.java 1307462 2012-03-30 15:13:11Z ggregory $
- * @since 1.4
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({ "serial" })
 public class SizeFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Size comparator instance - directories are treated as zero size */
     public static final Comparator<File> SIZE_COMPARATOR = new SizeFileComparator();
 
     /** Reverse size comparator instance - directories are treated as zero size */
-    public static final Comparator<File> SIZE_REVERSE = new ReverseComparator(SIZE_COMPARATOR);
+    public static final Comparator<File> SIZE_REVERSE = ReverseComparator.decorate(SIZE_COMPARATOR);
 
     /**
      * Size comparator instance which sums the size of a directory's contents
@@ -69,7 +67,7 @@ public class SizeFileComparator extends AbstractFileComparator implements Serial
      * Reverse size comparator instance which sums the size of a directory's contents
      * using {@link FileUtils#sizeOfDirectory(File)}
      */
-    public static final Comparator<File> SIZE_SUMDIR_REVERSE = new ReverseComparator(SIZE_SUMDIR_COMPARATOR);
+    public static final Comparator<File> SIZE_SUMDIR_REVERSE = ReverseComparator.decorate(SIZE_SUMDIR_COMPARATOR);
 
     /** Whether the sum of the directory's contents should be calculated. */
     private final boolean sumDirectoryContents;

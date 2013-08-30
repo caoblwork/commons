@@ -47,29 +47,27 @@ import com.github.yingzhuo.commons.io.IOCase;
  * </pre>
  * <p>
  *
- * @version $Id: NameFileComparator.java 1304052 2012-03-22 20:55:29Z ggregory $
- * @since 1.4
  */
-@SuppressWarnings({ "rawtypes", "unchecked", "serial" })
+@SuppressWarnings({ "serial" })
 public class NameFileComparator extends AbstractFileComparator implements Serializable {
 
     /** Case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
     public static final Comparator<File> NAME_COMPARATOR = new NameFileComparator();
 
     /** Reverse case-sensitive name comparator instance (see {@link IOCase#SENSITIVE}) */
-    public static final Comparator<File> NAME_REVERSE = new ReverseComparator(NAME_COMPARATOR);
+    public static final Comparator<File> NAME_REVERSE = ReverseComparator.decorate(NAME_COMPARATOR);
 
     /** Case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
     public static final Comparator<File> NAME_INSENSITIVE_COMPARATOR = new NameFileComparator(IOCase.INSENSITIVE);
 
     /** Reverse case-insensitive name comparator instance (see {@link IOCase#INSENSITIVE}) */
-    public static final Comparator<File> NAME_INSENSITIVE_REVERSE = new ReverseComparator(NAME_INSENSITIVE_COMPARATOR);
+    public static final Comparator<File> NAME_INSENSITIVE_REVERSE = ReverseComparator.decorate(NAME_INSENSITIVE_COMPARATOR);
 
     /** System sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
     public static final Comparator<File> NAME_SYSTEM_COMPARATOR = new NameFileComparator(IOCase.SYSTEM);
 
     /** Reverse system sensitive name comparator instance (see {@link IOCase#SYSTEM}) */
-    public static final Comparator<File> NAME_SYSTEM_REVERSE = new ReverseComparator(NAME_SYSTEM_COMPARATOR);
+    public static final Comparator<File> NAME_SYSTEM_REVERSE = ReverseComparator.decorate(NAME_SYSTEM_COMPARATOR);
 
     /** Whether the comparison is case sensitive. */
     private final IOCase caseSensitivity;
