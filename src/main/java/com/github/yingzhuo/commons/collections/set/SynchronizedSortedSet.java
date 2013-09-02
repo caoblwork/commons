@@ -14,10 +14,12 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.collections.collection;
+package com.github.yingzhuo.commons.collections.set;
 
 import java.util.Comparator;
 import java.util.SortedSet;
+
+import com.github.yingzhuo.commons.collections.collection.SynchronizedCollection;
 
 /**
  * Decorates another <code>SortedSet</code> to synchronize its behaviour
