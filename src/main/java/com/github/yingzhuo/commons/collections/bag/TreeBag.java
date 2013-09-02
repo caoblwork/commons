@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import com.github.yingzhuo.commons.collections.SortedBag;
 
 /**
  * Implements <code>SortedBag</code>, using a <code>TreeMap</code> to provide

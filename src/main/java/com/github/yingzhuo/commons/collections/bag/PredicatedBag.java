@@ -18,7 +18,6 @@ package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Set;
 
-import com.github.yingzhuo.commons.collections.Bag;
 import com.github.yingzhuo.commons.collections.collection.PredicatedCollection;
 import com.github.yingzhuo.commons.functor.Predicate;
 
@@ -50,11 +49,9 @@ public class PredicatedBag<E>
      * @param predicate  the predicate to use for validation, must not be null
      * @return a new predicated Bag
      * @throws IllegalArgumentException if bag or predicate is null
-     * @throws IllegalArgumentException if the bag contains invalid elements
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <E> Bag<E> decorate(Bag<E> bag, Predicate<E> predicate) {
-        return new PredicatedBag(bag, predicate);
+        return new PredicatedBag<E>(bag, predicate);
     }
 
     //-----------------------------------------------------------------------

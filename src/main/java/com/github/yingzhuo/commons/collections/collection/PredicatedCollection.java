@@ -53,9 +53,8 @@ public class PredicatedCollection<E> extends AbstractSerializableCollectionDecor
      * @throws IllegalArgumentException if collection or predicate is null
      * @throws IllegalArgumentException if the collection contains invalid elements
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <E> Collection<E> decorate(Collection<E> coll, Predicate<E> predicate) {
-        return new PredicatedCollection(coll, predicate);
+        return new PredicatedCollection<E>(coll, predicate);
     }
     
     //-----------------------------------------------------------------------
@@ -68,15 +67,14 @@ public class PredicatedCollection<E> extends AbstractSerializableCollectionDecor
      * @param coll  the collection to decorate, must not be null
      * @param predicate  the predicate to use for validation, must not be null
      * @throws IllegalArgumentException if collection or predicate is null
-     * @throws IllegalArgumentException if the collection contains invalid elements
      */
     protected PredicatedCollection(Collection<E> coll, Predicate<E> predicate) {
         super(coll);
         Validate.notNull(predicate);
         this.predicate = predicate;
-        for (Iterator<E> it = coll.iterator(); it.hasNext(); ) {
-            validate(it.next());
-        }
+//        for (Iterator<E> it = coll.iterator(); it.hasNext(); ) {
+//            validate(it.next());
+//        }
     }
 
     /**

@@ -18,7 +18,6 @@ package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Set;
 
-import com.github.yingzhuo.commons.collections.Bag;
 import com.github.yingzhuo.commons.collections.collection.SynchronizedCollection;
 import com.github.yingzhuo.commons.collections.set.SynchronizedSet;
 

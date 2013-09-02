@@ -16,10 +16,12 @@
  */
 package com.github.yingzhuo.commons.collections;
 
+import com.github.yingzhuo.commons.collections.bag.Bag;
 import com.github.yingzhuo.commons.collections.bag.ImmutableBag;
 import com.github.yingzhuo.commons.collections.bag.ImmutableSortedBag;
 import com.github.yingzhuo.commons.collections.bag.PredicatedBag;
 import com.github.yingzhuo.commons.collections.bag.PredicatedSortedBag;
+import com.github.yingzhuo.commons.collections.bag.SortedBag;
 import com.github.yingzhuo.commons.collections.bag.SynchronizedBag;
 import com.github.yingzhuo.commons.collections.bag.SynchronizedSortedBag;
 import com.github.yingzhuo.commons.collections.bag.TransformedBag;

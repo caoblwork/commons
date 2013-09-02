@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashMap;
 
-import com.github.yingzhuo.commons.collections.Bag;
 import com.github.yingzhuo.commons.mutable.MutableInt;
 
 /**

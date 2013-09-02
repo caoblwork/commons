@@ -18,7 +18,6 @@ package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.collections.SortedBag;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
@@ -67,7 +66,6 @@ public class PredicatedSortedBag<E>
      * @param bag  the bag to decorate, must not be null
      * @param predicate  the predicate to use for validation, must not be null
      * @throws IllegalArgumentException if bag or predicate is null
-     * @throws IllegalArgumentException if the bag contains invalid elements
      */
     protected PredicatedSortedBag(SortedBag<E> bag, Predicate<E> predicate) {
         super(bag, predicate);

@@ -53,9 +53,8 @@ public class PredicatedList<E> extends PredicatedCollection<E> implements List<E
      * @throws IllegalArgumentException if list or predicate is null
      * @throws IllegalArgumentException if the list contains invalid elements
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
 	public static <E> List<E> decorate(List<E> list, Predicate<E> predicate) {
-        return new PredicatedList(list, predicate);
+        return new PredicatedList<E>(list, predicate);
     }
 
     //-----------------------------------------------------------------------
@@ -68,7 +67,6 @@ public class PredicatedList<E> extends PredicatedCollection<E> implements List<E
      * @param list  the list to decorate, must not be null
      * @param predicate  the predicate to use for validation, must not be null
      * @throws IllegalArgumentException if list or predicate is null
-     * @throws IllegalArgumentException if the list contains invalid elements
      */
     protected PredicatedList(List<E> list, Predicate<E> predicate) {
         super(list, predicate);

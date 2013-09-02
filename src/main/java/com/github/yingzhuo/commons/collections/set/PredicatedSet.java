@@ -47,11 +47,9 @@ public class PredicatedSet<E> extends PredicatedCollection<E> implements Set<E> 
      * @param set  the set to decorate, must not be null
      * @param predicate  the predicate to use for validation, must not be null
      * @throws IllegalArgumentException if set or predicate is null
-     * @throws IllegalArgumentException if the set contains invalid elements
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static <E> Set<E> decorate(Set<E> set, Predicate<E> predicate) {
-        return new PredicatedSet(set, predicate);
+        return new PredicatedSet<E>(set, predicate);
     }
 
     //-----------------------------------------------------------------------

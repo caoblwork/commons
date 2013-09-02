@@ -5,9 +5,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import com.github.yingzhuo.commons.collections.IterableMap;
 import com.github.yingzhuo.commons.collections.iterator.MapIterator;
 import com.github.yingzhuo.commons.collections.map.ImmutableMap;
+import com.github.yingzhuo.commons.collections.map.IterableMap;
 
 public class TestCases {
 

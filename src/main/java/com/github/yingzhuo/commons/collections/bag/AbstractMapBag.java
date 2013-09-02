@@ -26,7 +26,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import com.github.yingzhuo.commons.collections.Bag;
 import com.github.yingzhuo.commons.collections.set.ImmutableSet;
 import com.github.yingzhuo.commons.mutable.MutableInt;
 

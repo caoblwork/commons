@@ -14,9 +14,10 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.collections;
+package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Comparator;
+
 
 /**
  * Defines a type of <code>Bag</code> that maintains a sorted order among

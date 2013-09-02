@@ -21,38 +21,36 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedMap;
 
 import com.github.yingzhuo.commons.collections.collection.ImmutableCollection;
-import com.github.yingzhuo.commons.collections.iterator.EntrySetMapIterator;
-import com.github.yingzhuo.commons.collections.iterator.ImmutableMapIterator;
-import com.github.yingzhuo.commons.collections.iterator.MapIterator;
 import com.github.yingzhuo.commons.collections.set.ImmutableSet;
 import com.github.yingzhuo.commons.immutable.Immutable;
 
 /**
- * Decorates another <code>Map</code> to ensure it can't be altered.
+ * Decorates another <code>SortedMap</code> to ensure it can't be altered.
  */
-public final class ImmutableMap<K, V>
-        extends AbstractMapDecorator<K, V>
-        implements IterableMap<K, V>, Immutable, Serializable {
+public final class ImmutableSortedMap<K, V>
+        extends AbstractSortedMapDecorator<K, V>
+        implements Immutable, Serializable {
 
     /** Serialization version */
-    private static final long serialVersionUID = 2737023427269031941L;
+    private static final long serialVersionUID = 5805344239827376360L;
 
     /**
-     * Factory method to create an unmodifiable map.
+     * Factory method to create an unmodifiable sorted map.
      * 
      * @param map  the map to decorate, must not be null
      * @throws IllegalArgumentException if map is null
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-	public static <K, V> Map<K, V> decorate(Map<K, V> map) {
+    public static <K, V> SortedMap<K, V> decorate(SortedMap<K, V> map) {
         if (map instanceof Immutable) {
             return map;
         }
-        return new ImmutableMap(map);
+        return new ImmutableSortedMap<K, V>(map);
     }
 
     //-----------------------------------------------------------------------
@@ -62,7 +60,7 @@ public final class ImmutableMap<K, V>
      * @param map  the map to decorate, must not be null
      * @throws IllegalArgumentException if map is null
      */
-    private ImmutableMap(Map<K, V> map) {
+    private ImmutableSortedMap(SortedMap<K, V> map) {
         super(map);
     }
 
@@ -108,17 +106,6 @@ public final class ImmutableMap<K, V>
         throw new UnsupportedOperationException();
     }
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public MapIterator<K, V> mapIterator() {
-        if (map instanceof IterableMap) {
-            MapIterator<K, V> it = ((IterableMap<K, V>) map).mapIterator();
-            return ImmutableMapIterator.decorate(it);
-        } else {
-            MapIterator<K, V> it = new EntrySetMapIterator(map);
-            return ImmutableMapIterator.decorate(it);
-        }
-    }
-
     public Set<Map.Entry<K, V>> entrySet() {
         Set<Map.Entry<K, V>> set = super.entrySet();
         return ImmutableEntrySet.decorate(set);
@@ -132,6 +119,34 @@ public final class ImmutableMap<K, V>
     public Collection<V> values() {
         Collection<V> coll = super.values();
         return ImmutableCollection.decorate(coll);
+    }
+
+    //-----------------------------------------------------------------------
+    public K firstKey() {
+        return getSortedMap().firstKey();
+    }
+
+    public K lastKey() {
+        return getSortedMap().lastKey();
+    }
+
+    public Comparator<? super K> comparator() {
+        return getSortedMap().comparator();
+    }
+
+    public SortedMap<K, V> subMap(K fromKey, K toKey) {
+        SortedMap<K, V> map = getSortedMap().subMap(fromKey, toKey);
+        return ImmutableSortedMap.decorate(map);
+    }
+
+    public SortedMap<K, V> headMap(K toKey) {
+        SortedMap<K, V> map = getSortedMap().headMap(toKey);
+        return ImmutableSortedMap.decorate(map);
+    }
+
+    public SortedMap<K, V> tailMap(K fromKey) {
+        SortedMap<K, V> map = getSortedMap().tailMap(fromKey);
+        return ImmutableSortedMap.decorate(map);
     }
 
 }

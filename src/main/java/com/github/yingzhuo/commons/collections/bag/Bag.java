@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.collections;
+package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Collection;
 import java.util.Iterator;

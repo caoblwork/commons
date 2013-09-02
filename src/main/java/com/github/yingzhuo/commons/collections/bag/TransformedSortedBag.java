@@ -18,7 +18,6 @@ package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.collections.SortedBag;
 import com.github.yingzhuo.commons.functor.Transformer;
 
 /**

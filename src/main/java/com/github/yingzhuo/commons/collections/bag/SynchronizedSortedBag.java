@@ -18,7 +18,6 @@ package com.github.yingzhuo.commons.collections.bag;
 
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.collections.SortedBag;
 
 /**
  * Decorates another <code>SortedBag</code> to synchronize its behaviour

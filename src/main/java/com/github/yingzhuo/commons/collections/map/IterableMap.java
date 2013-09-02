@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.collections;
+package com.github.yingzhuo.commons.collections.map;
 
 import java.util.Map;
 
