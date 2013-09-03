@@ -14,31 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.functor.predicate;
+package com.github.yingzhuo.commons.functor.transformer;
 
 import java.io.Serializable;
 
-import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.functor.Transformer;
 
 /**
- * Predicate implementation that always returns false.
+ * Transformer implementation that returns the <code>String.valueOf</code>.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public final class StringValueTransformer <T> implements Transformer<T, String>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = 7533784454832764388L;
-
-    /**
-     * Singleton predicate instance
-     */
-    @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+    static final long serialVersionUID = 7511110693171758606L;
 
     /**
      * Factory returning the singleton instance.
@@ -46,26 +40,25 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
      * @return the singleton instance
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
-	public static <T> Predicate<T> getInstance() {
-        return INSTANCE;
+    public static <T> Transformer<T, String> getInstance() {
+        return new StringValueTransformer<T>();
     }
 
     /**
      * Restricted constructor.
      */
-    private FalsePredicate() {
+    private StringValueTransformer() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Transforms the input to result by calling <code>String.valueOf</code>.
      *
-     * @param object the input object
-     * @return false always
+     * @param input the input object to transform
+     * @return the transformed result
      */
-    public boolean evaluate(T object) {
-        return false;
+    public String transform(T input) {
+        return String.valueOf(input);
     }
 
 }

@@ -1,10 +1,10 @@
+// GenericsNote: Converted (no generics required).
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -20,24 +20,23 @@ import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
  * Defines a predicate that decorates one or more other predicates.
- * <p>
+ * <p/>
  * This interface enables tools to access the decorated predicates.
- * 
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.1
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
- * 
- * @author Stephen Colebourne
  */
-public interface PredicateDecorator<T> extends Predicate<T> {
+public interface PredicateDecorator <T> extends Predicate<T> {
 
     /**
      * Gets the predicates being decorated as an array.
-     * <p>
+     * <p/>
      * The array may be the internal data structure of the predicate and thus
      * should not be altered.
-     * 
+     *
      * @return the predicates being decorated
      */
-    Predicate<T>[] getPredicates();
+    Predicate<? super T>[] getPredicates();
 
 }

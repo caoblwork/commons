@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2002-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,19 +18,20 @@ package com.github.yingzhuo.commons.functor;
 
 /**
  * Defines a functor interface implemented by classes that create objects.
- * <p>
+ * <p/>
  * A <code>Factory</code> creates an object without using an input parameter.
  * If an input parameter is required, then {@link Transformer} is more appropriate.
- * <p>
+ * <p/>
  * Standard implementations of common factories are provided by
  * {@link FactoryUtils}. These include factories that return a constant,
  * a copy of a prototype or a new instance.
- * 
  *
  * @author Arron Bates
- * @author Stephen Colebourne
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
+ * @since Commons Collections 2.1
  */
-public interface Factory<T> {
+public interface Factory <T> {
 
     /**
      * Create a new object.

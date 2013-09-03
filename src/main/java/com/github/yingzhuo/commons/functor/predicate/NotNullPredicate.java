@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,23 +22,32 @@ import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
  * Predicate implementation that returns true if the input is not null.
- * 
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
+ * @since Commons Collections 3.0
  */
-@SuppressWarnings("rawtypes")
-public final class NotNullPredicate<E> implements Predicate<E>, Serializable {
+public final class NotNullPredicate <T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
-    private static final long serialVersionUID = 7533784454832764388L;
-    
-    /** Singleton predicate instance */
-	public static final Predicate INSTANCE = new NotNullPredicate();
+    /**
+     * Serial version UID
+     */
+    static final long serialVersionUID = 7533784454832764388L;
+
+    /**
+     * Singleton predicate instance
+     */
+    @SuppressWarnings("rawtypes")
+	private static final Predicate INSTANCE = new NotNullPredicate();
 
     /**
      * Factory returning the singleton instance.
-     * 
+     *
      * @return the singleton instance
+     * @since Commons Collections 3.1
      */
-    public static Predicate<?> getInstance() {
+    @SuppressWarnings("unchecked")
+	public static <T> Predicate<T> getInstance() {
         return INSTANCE;
     }
 
@@ -51,11 +60,11 @@ public final class NotNullPredicate<E> implements Predicate<E>, Serializable {
 
     /**
      * Evaluates the predicate returning true if the object does not equal null.
-     * 
-     * @param object  the object to evaluate
+     *
+     * @param object the object to evaluate
      * @return true if not null
      */
-    public boolean evaluate(E object) {
+    public boolean evaluate(T object) {
         return (object != null);
     }
 

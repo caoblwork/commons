@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,26 +18,28 @@ package com.github.yingzhuo.commons.functor;
 
 /**
  * Defines a functor interface implemented by classes that do something.
- * <p>
+ * <p/>
  * A <code>Closure</code> represents a block of code which is executed from
  * inside some block, function or iteration. It operates an input object.
- * <p>
+ * <p/>
  * Standard implementations of common closures are provided by
  * {@link ClosureUtils}. These include method invokation and for/while loops.
- *  
- * @since Commons Collections 1.0
- * @version $Revision: 646777 $ $Date: 2008-04-10 13:33:15 +0100 (Thu, 10 Apr 2008) $
  *
+ * @author James Strachan
+ * @author Nicola Ken Barozzi
+ * @author Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
+ * @since Commons Collections 1.0
  */
-public interface Closure<T> {
+public interface Closure <T> {
 
     /**
      * Performs an action on the specified input object.
      *
-     * @param input  the input to execute on
-     * @throws ClassCastException (runtime) if the input is the wrong class
+     * @param input the input to execute on
+     * @throws ClassCastException       (runtime) if the input is the wrong class
      * @throws IllegalArgumentException (runtime) if the input is invalid
-     * @throws FunctorException (runtime) if any other error occurs
+     * @throws FunctorException         (runtime) if any other error occurs
      */
     public void execute(T input);
 

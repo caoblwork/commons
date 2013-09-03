@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -17,205 +17,155 @@
 package com.github.yingzhuo.commons.functor;
 
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.Iterator;
 
-import com.github.yingzhuo.commons.functor.closure.ChainedClosure;
-import com.github.yingzhuo.commons.functor.closure.ForClosure;
-import com.github.yingzhuo.commons.functor.closure.IfClosure;
-import com.github.yingzhuo.commons.functor.closure.NOPClosure;
-import com.github.yingzhuo.commons.functor.closure.SwitchClosure;
-import com.github.yingzhuo.commons.functor.closure.WhileClosure;
-import com.github.yingzhuo.commons.functor.comparator.BooleanComparator;
-import com.github.yingzhuo.commons.functor.comparator.ComparableComparator;
-import com.github.yingzhuo.commons.functor.comparator.ComparatorChain;
-import com.github.yingzhuo.commons.functor.comparator.NullComparator;
-import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
-import com.github.yingzhuo.commons.functor.comparator.TransformingComparator;
-import com.github.yingzhuo.commons.functor.predicate.AllPredicate;
-import com.github.yingzhuo.commons.functor.predicate.AndPredicate;
-import com.github.yingzhuo.commons.functor.predicate.AnyPredicate;
-import com.github.yingzhuo.commons.functor.predicate.EqualsPredicate;
-import com.github.yingzhuo.commons.functor.predicate.FalsePredicate;
-import com.github.yingzhuo.commons.functor.predicate.NonePredicate;
-import com.github.yingzhuo.commons.functor.predicate.NotNullPredicate;
-import com.github.yingzhuo.commons.functor.predicate.NotPredicate;
-import com.github.yingzhuo.commons.functor.predicate.OnePredicate;
-import com.github.yingzhuo.commons.functor.predicate.OrPredicate;
-import com.github.yingzhuo.commons.functor.predicate.TruePredicate;
-import com.github.yingzhuo.commons.functor.predicate.XorPredicate;
-import com.github.yingzhuo.commons.functor.transformer.ChainedTransformer;
-import com.github.yingzhuo.commons.functor.transformer.IfTransformer;
-import com.github.yingzhuo.commons.functor.transformer.NOPTransformer;
-import com.github.yingzhuo.commons.functor.transformer.SwitchTransformer;
-import com.github.yingzhuo.commons.lang.Validate;
-import com.github.yingzhuo.commons.lang.tuple.Pair;
+/**
+ * Internal utilities for functors.
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
+ * @since Commons Collections 3.0
+ */
+public class FunctorUtils {
 
-@SuppressWarnings("unchecked")
-public final class FunctorUtils {
+    /**
+     * Restricted constructor.
+     */
+    private FunctorUtils() {
+        super();
+    }
 
-	// CLOSURE
-	// -----------------------------------------------------------------------------------------------------------------------
-	public static final class CLOSURE {
-		
-		public static <T> Closure<T> nop() {
-			return NOPClosure.INSTANCE;
-		}
-		
-		public static <T> Closure<T> chain(Closure<T>...closures) {
-			return ChainedClosure.getInstance(closures);
-		}
-		
-		public static <T> Closure<T> forLoop(int count, Closure<T> closure) {
-			return ForClosure.getInstance(count, closure);
-		}
-		
-		public static <T> Closure<T> whileLoop(Predicate<T> predicate, Closure<T> closure, boolean doLoop) {
-			return WhileClosure.getInstance(predicate, closure, doLoop);
-		}
-		
-		public static <T> Closure<T> ifElse(Predicate<T> predicate, Closure<T> trueClosure) {
-			return IfClosure.getInstance(predicate, trueClosure);
-		}
-		
-		public static <T> Closure<T> ifElse(Predicate<T> predicate, Closure<T> trueClosure, Closure<T> falseClosure) {
-			if (falseClosure == null) {
-				return IfClosure.getInstance(predicate, trueClosure);
-			} else {
-				return IfClosure.getInstance(predicate, trueClosure, falseClosure);
-			}
-		}
-		
-		public static <T> Closure<T> switchDefault(Closure<T> defaultClosure, Pair<Predicate<T>, Closure<T>>...pairs) {
-			return SwitchClosure.getInstance(defaultClosure, pairs);
-		}
-	}
-	
-	// PREDICATE
-	// -----------------------------------------------------------------------------------------------------------------------
-	public static final class PREDICATE {
-		
-		public static <T> Predicate<T> notNull() {
-			return NotNullPredicate.INSTANCE;
-		}
+    /**
+     * Clone the predicates to ensure that the internal reference can't be messed with.
+     *
+     * @param predicates the predicates to copy
+     * @return the cloned predicates
+     */
+    public static <T> Predicate<? super T>[] copy(Predicate<? super T>[] predicates) {
+        if (predicates == null) {
+            return null;
+        }
+        return (Predicate<? super T>[]) predicates.clone();
+    }
 
-		public static <T> Predicate<T> alwaysTrue() {
-			return TruePredicate.INSTANCE;
-		}
-		
-		public static <T> Predicate<T> alwaysFalse() {
-			return FalsePredicate.INSTANCE;
-		}
-		
-		public static <T> Predicate<T> not(Predicate<T> predicate) {
-			return NotPredicate.getInstance(predicate);
-		}
-		
-		public static <T> Predicate<T> equals(Predicate<T> predicate1, Predicate<T> predicate2) {
-			return EqualsPredicate.getInstance(predicate1, predicate2);
-		}
-		
-		public static <T> Predicate<T> or(Predicate<T> predicate1, Predicate<T> predicate2) {
-			return OrPredicate.getInstance(predicate1, predicate2);
-		}
-		
-		public static <T> Predicate<T> and(Predicate<T> predicate1, Predicate<T> predicate2) {
-			return AndPredicate.getInstance(predicate1, predicate2);
-		}
-		
-		public static <T> Predicate<T> xor(Predicate<T> predicate1, Predicate<T> predicate2) {
-			return XorPredicate.getInstance(predicate1, predicate2);
-		}
-		
-		public static <T> Predicate<T> any(Predicate<T>... predicates) {
-			return AnyPredicate.getInstance(predicates);
-		}
-		
-		public static <T> Predicate<T> all(Predicate<T>... predicates) {
-			return AllPredicate.getInstance(predicates);
-		}
+    /**
+     * Validate the predicates to ensure that all is well.
+     *
+     * @param predicates the predicates to validate
+     */
+    public static <T> void validate(Predicate<? super T>[] predicates) {
+        if (predicates == null) {
+            throw new IllegalArgumentException("The predicate array must not be null");
+        }
+        for (int i = 0; i < predicates.length; i++) {
+            if (predicates[i] == null) {
+                throw new IllegalArgumentException("The predicate array must not contain a null predicate, index " + i + " was null");
+            }
+        }
+    }
 
-		public static <T> Predicate<T> none(Predicate<T>... predicates) {
-			return NonePredicate.getInstance(predicates);
-		}
-		
-		public static <T> Predicate<T> one(Predicate<T>... predicates) {
-			return OnePredicate.getInstance(predicates);
-		}
-	}
-	
-	// TRANSFORMER
-	// -----------------------------------------------------------------------------------------------------------------------
-	public static final class TRANSFORMER {
+    /**
+     * Validate the predicates to ensure that all is well.
+     *
+     * @param predicates the predicates to validate
+     */
+    public static <T> void validateMin2(Predicate<? super T>[] predicates) {
+        if (predicates == null) {
+            throw new IllegalArgumentException("The predicate array must not be null");
+        }
+        if (predicates.length < 2) {
+            throw new IllegalArgumentException("At least 2 predicates must be specified in the predicate array, size was " + predicates.length);
+        }
+        for (int i = 0; i < predicates.length; i++) {
+            if (predicates[i] == null) {
+                throw new IllegalArgumentException("The predicate array must not contain a null predicate, index " + i + " was null");
+            }
+        }
+    }
 
-		public static <T> Transformer<T> nop() {
-			return NOPTransformer.INSTANCE;
-		}
-		
-		public static <T> Transformer<T> chain(Transformer<T>... transformers) {
-			return ChainedTransformer.getInstance(transformers);
-		}
+    /**
+     * Validate the predicates to ensure that all is well.
+     *
+     * @param predicates the predicates to validate
+     * @return predicate array
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Predicate<? super T>[] validate(Collection<Predicate<? super T>> predicates) {
+        if (predicates == null) {
+            throw new IllegalArgumentException("The predicate collection must not be null");
+        }
+        if (predicates.size() < 2) {
+            throw new IllegalArgumentException("At least 2 predicates must be specified in the predicate collection, size was " + predicates.size());
+        }
+        // convert to array like this to guarantee iterator() ordering
+        Predicate<? super T>[] preds = new Predicate[predicates.size()];
+        int i = 0;
+        for (Iterator<Predicate<? super T>> it = predicates.iterator(); it.hasNext();) {
+            preds[i] = it.next();
+            if (preds[i] == null) {
+                throw new IllegalArgumentException("The predicate collection must not contain a null predicate, index " + i + " was null");
+            }
+            i++;
+        }
+        return preds;
+    }
 
-		public static <T> Transformer<T> ifElse(Predicate<T> predicate, Transformer<T> trueTransformer, Transformer<T> falseTransformer) {
-			if (falseTransformer == null) {
-				return IfTransformer.getInstance(predicate, trueTransformer);
-			} else {
-				return IfTransformer.getInstance(predicate, trueTransformer, falseTransformer);
-			}
-		}
+    /**
+     * Clone the closures to ensure that the internal reference can't be messed with.
+     *
+     * @param closures the closures to copy
+     * @return the cloned closures
+     */
+    public static <T> Closure<? super T>[] copy(Closure<? super T>[] closures) {
+        if (closures == null) {
+            return null;
+        }
+        return (Closure<? super T>[]) closures.clone();
+    }
 
-		public static <T> Transformer<T> switchDefault(Transformer<T> defaultTransformer, Pair<Predicate<T>, Transformer<T>>... pairs) {
-			return SwitchTransformer.getInstance(defaultTransformer, pairs);
-		}
-	}
+    /**
+     * Validate the closures to ensure that all is well.
+     *
+     * @param closures the closures to validate
+     */
+    public static <T> void validate(Closure<? super T>[] closures) {
+        if (closures == null) {
+            throw new IllegalArgumentException("The closure array must not be null");
+        }
+        for (int i = 0; i < closures.length; i++) {
+            if (closures[i] == null) {
+                throw new IllegalArgumentException("The closure array must not contain a null closure, index " + i + " was null");
+            }
+        }
+    }
 
-	// COMPARATOR
-	// -----------------------------------------------------------------------------------------------------------------------
-	public static final class COMPARATOR {
+    /**
+     * Copy method
+     *
+     * @param transformers the transformers to copy
+     * @return a clone of the transformers
+     */
+    public static <I,O> Transformer<? super I, ? extends O>[] copy(Transformer<? super I, ? extends O>[] transformers) {
+        if (transformers == null) {
+            return null;
+        }
+        return (Transformer<? super I, ? extends O>[]) transformers.clone();
+    }
 
-		public static <T> Comparator<T> naturalComparator(Class<? extends Comparator<T>> klass) {
-	    	return ComparableComparator.INSTANCE;
-	    }
+    /**
+     * Validate method
+     *
+     * @param transformers the transformers to validate
+     */
+    public static <I,O> void validate(Transformer<? super I, ? extends O>[] transformers) {
+        if (transformers == null) {
+            throw new IllegalArgumentException("The transformer array must not be null");
+        }
+        for (int i = 0; i < transformers.length; i++) {
+            if (transformers[i] == null) {
+                throw new IllegalArgumentException("The transformer array must not contain a null transformer, index " + i + " was null");
+            }
+        }
+    }
 
-		public static <T> Comparator<T> chainedComparator(Comparator<T> comparator1, Comparator<T> comparator2) {
-	        return chainedComparator(new Comparator[] {comparator1, comparator2});
-	    }
-
-	    public static <T> Comparator<T> chainedComparator(Comparator<T>[] comparators) {
-	        ComparatorChain<T> chain = new ComparatorChain<T>();
-	        for (int i = 0; i < comparators.length; i++) {
-	            if (comparators[i] == null) {
-	                throw new NullPointerException("Comparator cannot be null");
-	            }
-	            chain.addComparator(comparators[i]);
-	        }
-	        return chain;
-	    }
-
-		public static <T> Comparator<T> chainedComparator(Collection<Comparator<T>> comparators) {
-	        return chainedComparator(
-	            (Comparator[]) comparators.toArray(new Comparator[comparators.size()])
-	        );
-	    }
-
-		public static <T> Comparator<T> reversedComparator(Comparator<T> comparator) {
-	        return ReverseComparator.decorate(comparator);
-	    }
-
-		public static <T> Comparator<T> booleanComparator(boolean trueFirst) {
-	        return (Comparator<T>) BooleanComparator.getBooleanComparator(trueFirst);
-	    }
-	    
-		public static <T> Comparator<T> nullLowComparator(Comparator<T> comparator) {
-	        Validate.notNull(comparator);
-	        return NullComparator.decorate(comparator, false);
-	    }
-
-	    public static <T> Comparator<T> nullHighComparator(Comparator<T> comparator) {
-	        return NullComparator.decorate(comparator, true);
-	    }
-
-		public static <T> Comparator<T> transformedComparator(Comparator<T> comparator, Transformer<T> transformer) {
-	        return TransformingComparator.decorate(transformer, comparator);
-	    }
-	}
 }

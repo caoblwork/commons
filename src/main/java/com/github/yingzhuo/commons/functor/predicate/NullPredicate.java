@@ -21,13 +21,13 @@ import java.io.Serializable;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that always returns false.
+ * Predicate implementation that returns true if the input is null.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public final class NullPredicate <T> implements Predicate<T>, Serializable {
 
     /**
      * Serial version UID
@@ -38,7 +38,7 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
      * Singleton predicate instance
      */
     @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+	private static final Predicate INSTANCE = new NullPredicate();
 
     /**
      * Factory returning the singleton instance.
@@ -54,18 +54,18 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
     /**
      * Restricted constructor.
      */
-    private FalsePredicate() {
+    private NullPredicate() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Evaluates the predicate returning true if the input is null.
      *
      * @param object the input object
-     * @return false always
+     * @return true if input is null
      */
     public boolean evaluate(T object) {
-        return false;
+        return (object == null);
     }
 
 }

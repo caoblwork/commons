@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -19,28 +19,32 @@ package com.github.yingzhuo.commons.functor;
 /**
  * Defines a functor interface implemented by classes that transform one
  * object into another.
- * <p>
+ * <p/>
  * A <code>Transformer</code> converts the input object to the output object.
  * The input object should be left unchanged.
  * Transformers are typically used for type conversions, or extracting data
  * from an object.
- * <p>
+ * <p/>
  * Standard implementations of common transformers are provided by
  * {@link TransformerUtils}. These include method invokation, returning a constant,
  * cloning and returning the string value.
- * 
+ *
+ * @author James Strachan
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
+ * @since Commons Collections 1.0
  */
-public interface Transformer<T> {
+public interface Transformer <I, O> {
 
     /**
      * Transforms the input object (leaving it unchanged) into some output object.
      *
-     * @param input  the object to be transformed, should be left unchanged
+     * @param input the object to be transformed, should be left unchanged
      * @return a transformed object
-     * @throws ClassCastException (runtime) if the input is the wrong class
+     * @throws ClassCastException       (runtime) if the input is the wrong class
      * @throws IllegalArgumentException (runtime) if the input is invalid
-     * @throws FunctorException (runtime) if the transform cannot be completed
+     * @throws FunctorException         (runtime) if the transform cannot be completed
      */
-    public T transform(T input);
+    public O transform(I input);
 
 }

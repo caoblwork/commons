@@ -1,4 +1,4 @@
-// GenericsNote: Converted.
+// GenericsNote: Converted (nothing to convert).
 /*
  *  Copyright 2001-2004 The Apache Software Foundation
  *
@@ -14,31 +14,34 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.functor.predicate;
+package com.github.yingzhuo.commons.functor.transformer;
 
 import java.io.Serializable;
 
-import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.functor.Transformer;
+import com.github.yingzhuo.commons.functor.factory.PrototypeFactory;
 
 /**
- * Predicate implementation that always returns false.
+ * Transformer implementation that returns a clone of the input object.
+ * <p/>
+ * Clone is performed using <code>PrototypeFactory.getInstance(input).create()</code>.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public class CloneTransformer<T> implements Transformer<T, T>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = 7533784454832764388L;
+    static final long serialVersionUID = -8188742709499652567L;
 
     /**
      * Singleton predicate instance
      */
     @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+	public static final Transformer INSTANCE = new CloneTransformer();
 
     /**
      * Factory returning the singleton instance.
@@ -46,26 +49,29 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
      * @return the singleton instance
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
-	public static <T> Predicate<T> getInstance() {
+	@SuppressWarnings("unchecked")
+	public static <T> Transformer<T, T> getInstance() {
         return INSTANCE;
     }
 
     /**
-     * Restricted constructor.
+     * Constructor
      */
-    private FalsePredicate() {
+    private CloneTransformer() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Transforms the input to result by cloning it.
      *
-     * @param object the input object
-     * @return false always
+     * @param input the input object to transform
+     * @return the transformed result
      */
-    public boolean evaluate(T object) {
-        return false;
+    public T transform(T input) {
+        if (input == null) {
+            return null;
+        }
+        return PrototypeFactory.getInstance(input).create();
     }
 
 }

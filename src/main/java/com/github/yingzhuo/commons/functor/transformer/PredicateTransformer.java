@@ -14,75 +14,76 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.functor.predicate;
+package com.github.yingzhuo.commons.functor.transformer;
 
 import java.io.Serializable;
 
 import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.functor.Transformer;
 
 /**
- * Predicate implementation that returns the opposite of the decorated predicate.
+ * Transformer implementation that calls a Predicate using the input object
+ * and then returns the input.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
+public class PredicateTransformer <T> implements Transformer<T, Boolean>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = -2654603322338049674L;
+    static final long serialVersionUID = 5278818408044349346L;
 
     /**
-     * The predicate to decorate
+     * The closure to wrap
      */
     private final Predicate<T> iPredicate;
 
     /**
-     * Factory to create the not predicate.
+     * Factory method that performs validation.
      *
-     * @param predicate the predicate to decorate, not null
-     * @return the predicate
+     * @param predicate the predicate to call, not null
+     * @return the <code>predicate</code> transformer
      * @throws IllegalArgumentException if the predicate is null
      */
-    public static <T> Predicate<T> getInstance(Predicate<T> predicate) {
+    public static <T> Transformer<T, Boolean> getInstance(Predicate<T> predicate) {
         if (predicate == null) {
             throw new IllegalArgumentException("Predicate must not be null");
         }
-        return new NotPredicate<T>(predicate);
+        return new PredicateTransformer<T>(predicate);
     }
 
     /**
      * Constructor that performs no validation.
      * Use <code>getInstance</code> if you want that.
      *
-     * @param predicate the predicate to call after the null check
+     * @param predicate the predicate to call, not null
      */
-    public NotPredicate(Predicate<T> predicate) {
+    public PredicateTransformer(Predicate<T> predicate) {
         super();
         iPredicate = predicate;
     }
 
     /**
-     * Evaluates the predicate returning the opposite to the stored predicate.
+     * Transforms the input to result by calling a predicate.
      *
-     * @param object the input object
-     * @return true if predicate returns false
+     * @param input the input object to transform
+     * @return the transformed result
      */
-    public boolean evaluate(T object) {
-        return !(iPredicate.evaluate(object));
+    public Boolean transform(T input) {
+        return (iPredicate.evaluate(input) ? Boolean.TRUE : Boolean.FALSE);
     }
 
     /**
-     * Gets the predicate being decorated.
+     * Gets the predicate.
      *
-     * @return the predicate as the only element in an array
+     * @return the predicate
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
-	public Predicate<? super T>[] getPredicates() {
-        return new Predicate[]{iPredicate};
+    public Predicate<T> getPredicate() {
+        return iPredicate;
     }
 
 }

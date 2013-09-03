@@ -21,68 +21,68 @@ import java.io.Serializable;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that returns the opposite of the decorated predicate.
+ * Predicate implementation that returns true if the input is the same object
+ * as the one stored in this predicate by equals.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
+public final class EqualPredicate <T> implements Predicate<T>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = -2654603322338049674L;
+    static final long serialVersionUID = 5633766978029907089L;
 
     /**
-     * The predicate to decorate
+     * The value to compare to
      */
-    private final Predicate<T> iPredicate;
+    private final T iValue;
 
     /**
-     * Factory to create the not predicate.
+     * Factory to create the identity predicate.
      *
-     * @param predicate the predicate to decorate, not null
+     * @param object the object to compare to
      * @return the predicate
      * @throws IllegalArgumentException if the predicate is null
      */
-    public static <T> Predicate<T> getInstance(Predicate<T> predicate) {
-        if (predicate == null) {
-            throw new IllegalArgumentException("Predicate must not be null");
+    public static <T> Predicate<T> getInstance(T object) {
+        if (object == null) {
+            return NullPredicate.getInstance();
         }
-        return new NotPredicate<T>(predicate);
+        return new EqualPredicate<T>(object);
     }
 
     /**
      * Constructor that performs no validation.
      * Use <code>getInstance</code> if you want that.
      *
-     * @param predicate the predicate to call after the null check
+     * @param object the object to compare to
      */
-    public NotPredicate(Predicate<T> predicate) {
+    public EqualPredicate(T object) {
         super();
-        iPredicate = predicate;
+        iValue = object;
     }
 
     /**
-     * Evaluates the predicate returning the opposite to the stored predicate.
+     * Evaluates the predicate returning true if the input equals the stored value.
      *
      * @param object the input object
-     * @return true if predicate returns false
+     * @return true if input object equals stored value
      */
     public boolean evaluate(T object) {
-        return !(iPredicate.evaluate(object));
+        return (iValue.equals(object));
     }
 
     /**
-     * Gets the predicate being decorated.
+     * Gets the value.
      *
-     * @return the predicate as the only element in an array
+     * @return the value
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
-	public Predicate<? super T>[] getPredicates() {
-        return new Predicate[]{iPredicate};
+    public T getValue() {
+        return iValue;
     }
 
 }

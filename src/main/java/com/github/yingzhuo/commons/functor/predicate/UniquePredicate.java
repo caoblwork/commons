@@ -17,55 +17,58 @@
 package com.github.yingzhuo.commons.functor.predicate;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that always returns false.
+ * Predicate implementation that returns true the first time an object is
+ * passed into the predicate.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public final class UniquePredicate <T> implements Predicate<T>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = 7533784454832764388L;
+    static final long serialVersionUID = -3319417438027438040L;
 
     /**
-     * Singleton predicate instance
+     * The set of previously seen objects
      */
-    @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+    private final Set<T> iSet = new HashSet<T>();
 
     /**
-     * Factory returning the singleton instance.
+     * Factory to create the predicate.
      *
-     * @return the singleton instance
-     * @since Commons Collections 3.1
+     * @return the predicate
+     * @throws IllegalArgumentException if the predicate is null
      */
-    @SuppressWarnings("unchecked")
-	public static <T> Predicate<T> getInstance() {
-        return INSTANCE;
+    public static <T> Predicate<T> getInstance() {
+        return new UniquePredicate<T>();
     }
 
     /**
-     * Restricted constructor.
+     * Constructor that performs no validation.
+     * Use <code>getInstance</code> if you want that.
      */
-    private FalsePredicate() {
+    public UniquePredicate() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Evaluates the predicate returning true if the input object hasn't been
+     * received yet.
      *
      * @param object the input object
-     * @return false always
+     * @return true if this is the first time the object is seen
      */
     public boolean evaluate(T object) {
-        return false;
+        return iSet.add(object);
     }
 
 }

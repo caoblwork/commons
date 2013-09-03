@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,17 +22,34 @@ import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
  * Predicate implementation that always returns true.
- * 
- * @author Stephen Colebourne
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
+ * @since Commons Collections 3.0
  */
-@SuppressWarnings({"rawtypes"})
-public final class TruePredicate<T> implements Predicate<T>, Serializable {
+public final class TruePredicate <T> implements Predicate<T>, Serializable {
 
-    /** Serial version UID */
-    private static final long serialVersionUID = 3374767158756189740L;
-    
-    /** Singleton predicate instance */
-	public static final Predicate INSTANCE = new TruePredicate();
+    /**
+     * Serial version UID
+     */
+    static final long serialVersionUID = 3374767158756189740L;
+
+    /**
+     * Singleton predicate instance
+     */
+    @SuppressWarnings("rawtypes")
+	private static final Predicate INSTANCE = new TruePredicate();
+
+    /**
+     * Factory returning the singleton instance.
+     *
+     * @return the singleton instance
+     * @since Commons Collections 3.1
+     */
+    @SuppressWarnings("unchecked")
+	public static <T> Predicate<T> getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Restricted constructor.
@@ -43,11 +60,11 @@ public final class TruePredicate<T> implements Predicate<T>, Serializable {
 
     /**
      * Evaluates the predicate returning true always.
-     * 
-     * @param object  the input object
+     *
+     * @param object the input object
      * @return true always
      */
-    public boolean evaluate(Object object) {
+    public boolean evaluate(T object) {
         return true;
     }
 

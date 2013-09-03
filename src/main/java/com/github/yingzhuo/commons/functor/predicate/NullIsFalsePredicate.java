@@ -21,18 +21,18 @@ import java.io.Serializable;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that returns the opposite of the decorated predicate.
+ * Predicate implementation that returns false if the input is null.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
+public final class NullIsFalsePredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = -2654603322338049674L;
+    static final long serialVersionUID = -2997501534564735525L;
 
     /**
      * The predicate to decorate
@@ -40,7 +40,7 @@ public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<
     private final Predicate<T> iPredicate;
 
     /**
-     * Factory to create the not predicate.
+     * Factory to create the null false predicate.
      *
      * @param predicate the predicate to decorate, not null
      * @return the predicate
@@ -50,7 +50,7 @@ public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<
         if (predicate == null) {
             throw new IllegalArgumentException("Predicate must not be null");
         }
-        return new NotPredicate<T>(predicate);
+        return new NullIsFalsePredicate<T>(predicate);
     }
 
     /**
@@ -59,19 +59,23 @@ public final class NotPredicate <T> implements Predicate<T>, PredicateDecorator<
      *
      * @param predicate the predicate to call after the null check
      */
-    public NotPredicate(Predicate<T> predicate) {
+    public NullIsFalsePredicate(Predicate<T> predicate) {
         super();
         iPredicate = predicate;
     }
 
     /**
-     * Evaluates the predicate returning the opposite to the stored predicate.
+     * Evaluates the predicate returning the result of the decorated predicate
+     * once a null check is performed.
      *
      * @param object the input object
-     * @return true if predicate returns false
+     * @return true if decorated predicate returns true, false if input is null
      */
     public boolean evaluate(T object) {
-        return !(iPredicate.evaluate(object));
+        if (object == null) {
+            return false;
+        }
+        return iPredicate.evaluate(object);
     }
 
     /**

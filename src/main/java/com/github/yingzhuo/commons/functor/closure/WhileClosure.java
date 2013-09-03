@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -21,51 +21,62 @@ import java.io.Serializable;
 import com.github.yingzhuo.commons.functor.Closure;
 import com.github.yingzhuo.commons.functor.Predicate;
 
-
 /**
  * Closure implementation that executes a closure repeatedly until a condition is met,
  * like a do-while or while loop.
- * 
- * @author Stephen Colebourne
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
+ * @since Commons Collections 3.0
  */
-@SuppressWarnings({ "unchecked", "rawtypes" })
-public class WhileClosure<T> implements Closure<T>, Serializable {
+public class WhileClosure <T> implements Closure<T>, Serializable {
 
-    /** Serial version UID */
-    private static final long serialVersionUID = -3110538116913760108L;
+    /**
+     * Serial version UID
+     */
+    static final long serialVersionUID = -3110538116913760108L;
 
-    private final Predicate<T> iPredicate;
-    private final Closure<T> iClosure;
+    /**
+     * The test condition
+     */
+    private final Predicate<? super T> iPredicate;
+    /**
+     * The closure to call
+     */
+    private final Closure<? super T> iClosure;
+    /**
+     * The flag, true is a do loop, false is a while
+     */
     private final boolean iDoLoop;
 
     /**
      * Factory method that performs validation.
-     * 
-     * @param predicate  the predicate used to evaluate when the loop terminates, not null
-     * @param closure  the closure the execute, not null
-     * @param doLoop  true to act as a do-while loop, always executing the closure once
+     *
+     * @param predicate the predicate used to evaluate when the loop terminates, not null
+     * @param closure   the closure the execute, not null
+     * @param doLoop    true to act as a do-while loop, always executing the closure once
      * @return the <code>while</code> closure
      * @throws IllegalArgumentException if the predicate or closure is null
      */
-    public static <T> Closure<T> getInstance(Predicate<T> predicate, Closure<T> closure, boolean doLoop) {
+    public static <T> Closure<T> getInstance(Predicate<? super T> predicate, Closure<? super T> closure, boolean doLoop) {
         if (predicate == null) {
             throw new IllegalArgumentException("Predicate must not be null");
         }
         if (closure == null) {
             throw new IllegalArgumentException("Closure must not be null");
         }
-        return new WhileClosure(predicate, closure, doLoop);
+        return new WhileClosure<T>(predicate, closure, doLoop);
     }
 
     /**
      * Constructor that performs no validation.
      * Use <code>getInstance</code> if you want that.
-     * 
-     * @param predicate  the predicate used to evaluate when the loop terminates, not null
-     * @param closure  the closure the execute, not null
-     * @param doLoop  true to act as a do-while loop, always executing the closure once
+     *
+     * @param predicate the predicate used to evaluate when the loop terminates, not null
+     * @param closure   the closure the execute, not null
+     * @param doLoop    true to act as a do-while loop, always executing the closure once
      */
-    private WhileClosure(Predicate<T> predicate, Closure<T> closure, boolean doLoop) {
+    public WhileClosure(Predicate<? super T> predicate, Closure<? super T> closure, boolean doLoop) {
         super();
         iPredicate = predicate;
         iClosure = closure;
@@ -74,8 +85,8 @@ public class WhileClosure<T> implements Closure<T>, Serializable {
 
     /**
      * Executes the closure until the predicate is false.
-     * 
-     * @param input  the input object
+     *
+     * @param input the input object
      */
     public void execute(T input) {
         if (iDoLoop) {
@@ -88,26 +99,27 @@ public class WhileClosure<T> implements Closure<T>, Serializable {
 
     /**
      * Gets the predicate in use.
-     * 
+     *
      * @return the predicate
+     * @since Commons Collections 3.1
      */
-    public Predicate<T> getPredicate() {
+    public Predicate<? super T> getPredicate() {
         return iPredicate;
     }
 
     /**
      * Gets the closure.
-     * 
+     *
      * @return the closure
      * @since Commons Collections 3.1
      */
-    public Closure<T> getClosure() {
+    public Closure<? super T> getClosure() {
         return iClosure;
     }
 
     /**
      * Is the loop a do-while loop.
-     * 
+     *
      * @return true is do-while, false if while
      * @since Commons Collections 3.1
      */
@@ -116,4 +128,3 @@ public class WhileClosure<T> implements Closure<T>, Serializable {
     }
 
 }
-

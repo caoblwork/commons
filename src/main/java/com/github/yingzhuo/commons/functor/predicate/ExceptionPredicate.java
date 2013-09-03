@@ -18,27 +18,28 @@ package com.github.yingzhuo.commons.functor.predicate;
 
 import java.io.Serializable;
 
+import com.github.yingzhuo.commons.exception.FunctorException;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that always returns false.
+ * Predicate implementation that always throws an exception.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public final class ExceptionPredicate <T> implements Predicate<T>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = 7533784454832764388L;
+    static final long serialVersionUID = 7179106032121985545L;
 
     /**
      * Singleton predicate instance
      */
     @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+	public static final Predicate INSTANCE = new ExceptionPredicate();
 
     /**
      * Factory returning the singleton instance.
@@ -46,7 +47,7 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
      * @return the singleton instance
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	public static <T> Predicate<T> getInstance() {
         return INSTANCE;
     }
@@ -54,18 +55,19 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
     /**
      * Restricted constructor.
      */
-    private FalsePredicate() {
+    private ExceptionPredicate() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Evaluates the predicate always throwing an exception.
      *
      * @param object the input object
-     * @return false always
+     * @return never
+     * @throws FunctorException always
      */
     public boolean evaluate(T object) {
-        return false;
+        throw new FunctorException("ExceptionPredicate invoked");
     }
 
 }

@@ -1,10 +1,10 @@
+// GenericsNote: Converted.
 /*
- *  Licensed to the Apache Software Foundation (ASF) under one or more
- *  contributor license agreements.  See the NOTICE file distributed with
- *  this work for additional information regarding copyright ownership.
- *  The ASF licenses this file to You under the Apache License, Version 2.0
- *  (the "License"); you may not use this file except in compliance with
- *  the License.  You may obtain a copy of the License at
+ *  Copyright 2001-2004 The Apache Software Foundation
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -22,24 +22,32 @@ import com.github.yingzhuo.commons.functor.Transformer;
 
 /**
  * Transformer implementation that does nothing.
- * 
- * @author Stephen Colebourne
+ *
+ * @author Matt Hall, John Watkinson, Stephen Colebourne
+ * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
+ * @since Commons Collections 3.0
  */
-@SuppressWarnings("rawtypes")
-public class NOPTransformer<T> implements Transformer<T>, Serializable {
+public class NOPTransformer <I> implements Transformer<I, I>, Serializable {
 
-    /** Serial version UID */
-    private static final long serialVersionUID = 2133891748318574490L;
+    /**
+     * Serial version UID
+     */
+    static final long serialVersionUID = 2133891748318574490L;
 
-    /** Singleton predicate instance */
+    /**
+     * Singleton predicate instance
+     */
+    @SuppressWarnings("rawtypes")
 	public static final Transformer INSTANCE = new NOPTransformer();
 
     /**
      * Factory returning the singleton instance.
-     * 
+     *
      * @return the singleton instance
+     * @since Commons Collections 3.1
      */
-	public static Transformer getInstance() {
+	@SuppressWarnings("unchecked")
+	public static <T> Transformer<T,T> getInstance() {
         return INSTANCE;
     }
 
@@ -52,11 +60,11 @@ public class NOPTransformer<T> implements Transformer<T>, Serializable {
 
     /**
      * Transforms the input to result by doing nothing.
-     * 
-     * @param input  the input object to transform
+     *
+     * @param input the input object to transform
      * @return the transformed result which is the input
      */
-	public T transform(T input) {
+    public I transform(I input) {
         return input;
     }
 

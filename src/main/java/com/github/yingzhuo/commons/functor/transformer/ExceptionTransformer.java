@@ -14,31 +14,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.functor.predicate;
+package com.github.yingzhuo.commons.functor.transformer;
 
 import java.io.Serializable;
 
-import com.github.yingzhuo.commons.functor.Predicate;
+import com.github.yingzhuo.commons.exception.FunctorException;
+import com.github.yingzhuo.commons.functor.Transformer;
 
 /**
- * Predicate implementation that always returns false.
+ * Transformer implementation that always throws an exception.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
  * @since Commons Collections 3.0
  */
-public final class FalsePredicate <T> implements Predicate<T>, Serializable {
+public final class ExceptionTransformer <I,O> implements Transformer<I, O>, Serializable {
 
     /**
      * Serial version UID
      */
-    static final long serialVersionUID = 7533784454832764388L;
+    static final long serialVersionUID = 7179106032121985545L;
+
 
     /**
      * Singleton predicate instance
      */
     @SuppressWarnings("rawtypes")
-	private static final Predicate INSTANCE = new FalsePredicate();
+	public static final Transformer INSTANCE = new ExceptionTransformer();
 
     /**
      * Factory returning the singleton instance.
@@ -46,26 +48,27 @@ public final class FalsePredicate <T> implements Predicate<T>, Serializable {
      * @return the singleton instance
      * @since Commons Collections 3.1
      */
-    @SuppressWarnings("unchecked")
-	public static <T> Predicate<T> getInstance() {
+	@SuppressWarnings("unchecked")
+	public static <I,O> Transformer<I,O> getInstance() {
         return INSTANCE;
     }
 
     /**
      * Restricted constructor.
      */
-    private FalsePredicate() {
+    private ExceptionTransformer() {
         super();
     }
 
     /**
-     * Evaluates the predicate returning false always.
+     * Transforms the input to result by cloning it.
      *
-     * @param object the input object
-     * @return false always
+     * @param input the input object to transform
+     * @return never
+     * @throws FunctorException always
      */
-    public boolean evaluate(T object) {
-        return false;
+    public O transform(I input) {
+        throw new FunctorException("ExceptionTransformer invoked");
     }
 
 }

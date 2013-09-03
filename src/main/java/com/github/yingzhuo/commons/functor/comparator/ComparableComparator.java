@@ -36,6 +36,21 @@ public class ComparableComparator implements Comparator, Serializable {
 
     /** The singleton instance. */
     public static final ComparableComparator INSTANCE = new ComparableComparator();
+    
+    //-----------------------------------------------------------------------
+    /**
+     * Gets the singleton instance of a ComparableComparator.
+     * <p/>
+     * Developers are encouraged to use the comparator returned from this method
+     * instead of constructing a new instance to reduce allocation and GC overhead
+     * when multiple comparable comparators may be used in the same VM.
+     *
+     * @return the singleton ComparableComparator
+     */
+	@SuppressWarnings("unchecked")
+	public static <T> Comparator<T> getInstance() {
+        return INSTANCE;
+    }
 
     //-----------------------------------------------------------------------
     /**
