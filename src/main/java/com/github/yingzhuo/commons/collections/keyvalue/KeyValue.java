@@ -14,26 +14,33 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.immutable;
+package com.github.yingzhuo.commons.collections.keyvalue;
 
 /**
- * Marker interface for collections15, maps and iterators that are unmodifiable.
+ * Defines a simple key value pair.
  * <p/>
- * This interface enables testing such as:
- * <pre>
- * if (coll instanceof Unmodifiable) {
- *   coll = new ArrayList(coll);
- * }
- * // now we know coll is modifiable
- * </pre>
- * Of course all this only works if you use the Unmodifiable classes defined
- * in this library. If you use the JDK unmodifiable class via java util Collections
- * then the interface won't be there.
+ * A Map Entry has considerable additional semantics over and above a simple
+ * key-value pair. This interface defines the minimum key value, with just the
+ * two get methods.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
  * @since Commons Collections 3.0
  */
-public interface Immutable {
-    // marker interface - no methods to implement
+public interface KeyValue <K,V> {
+
+    /**
+     * Gets the key from the pair.
+     *
+     * @return the key
+     */
+    K getKey();
+
+    /**
+     * Gets the value from the pair.
+     *
+     * @return the value
+     */
+    V getValue();
+
 }

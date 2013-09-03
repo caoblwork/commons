@@ -14,26 +14,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.immutable;
+package com.github.yingzhuo.commons.collections.map;
+
+import java.util.Map;
 
 /**
- * Marker interface for collections15, maps and iterators that are unmodifiable.
+ * Defines a map that is bounded in size.
  * <p/>
- * This interface enables testing such as:
- * <pre>
- * if (coll instanceof Unmodifiable) {
- *   coll = new ArrayList(coll);
- * }
- * // now we know coll is modifiable
- * </pre>
- * Of course all this only works if you use the Unmodifiable classes defined
- * in this library. If you use the JDK unmodifiable class via java util Collections
- * then the interface won't be there.
+ * The size of the map can vary, but it can never exceed a preset
+ * maximum number of elements. This interface allows the querying of details
+ * associated with the maximum number of elements.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
  * @since Commons Collections 3.0
  */
-public interface Immutable {
-    // marker interface - no methods to implement
+public interface BoundedMap <K,V> extends Map<K, V> {
+
+    /**
+     * Returns true if this map is full and no new elements can be added.
+     *
+     * @return <code>true</code> if the map is full
+     */
+    boolean isFull();
+
+    /**
+     * Gets the maximum size of the map (the bound).
+     *
+     * @return the maximum number of elements the map can hold
+     */
+    int maxSize();
+
 }

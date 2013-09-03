@@ -14,26 +14,25 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.immutable;
+package com.github.yingzhuo.commons.functor.iterator;
+
+import java.util.Iterator;
 
 /**
- * Marker interface for collections15, maps and iterators that are unmodifiable.
+ * Defines an iterator that can be reset back to an initial state.
  * <p/>
- * This interface enables testing such as:
- * <pre>
- * if (coll instanceof Unmodifiable) {
- *   coll = new ArrayList(coll);
- * }
- * // now we know coll is modifiable
- * </pre>
- * Of course all this only works if you use the Unmodifiable classes defined
- * in this library. If you use the JDK unmodifiable class via java util Collections
- * then the interface won't be there.
+ * This interface allows an iterator to be repeatedly reused.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
  * @since Commons Collections 3.0
  */
-public interface Immutable {
-    // marker interface - no methods to implement
+public interface ResettableIterator <E> extends Iterator<E> {
+
+    /**
+     * Resets the iterator back to the position at which the iterator
+     * was created.
+     */
+    public void reset();
+
 }

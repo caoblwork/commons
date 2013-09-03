@@ -14,26 +14,35 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package com.github.yingzhuo.commons.immutable;
+package com.github.yingzhuo.commons.functor.iterator;
+
+import java.util.Iterator;
 
 /**
- * Marker interface for collections15, maps and iterators that are unmodifiable.
+ * Defines an iterator that operates over a ordered collections15.
  * <p/>
- * This interface enables testing such as:
- * <pre>
- * if (coll instanceof Unmodifiable) {
- *   coll = new ArrayList(coll);
- * }
- * // now we know coll is modifiable
- * </pre>
- * Of course all this only works if you use the Unmodifiable classes defined
- * in this library. If you use the JDK unmodifiable class via java util Collections
- * then the interface won't be there.
+ * This iterator allows both forward and reverse iteration through the collection.
  *
  * @author Matt Hall, John Watkinson, Stephen Colebourne
  * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
  * @since Commons Collections 3.0
  */
-public interface Immutable {
-    // marker interface - no methods to implement
+public interface OrderedIterator <E> extends Iterator<E> {
+
+    /**
+     * Checks to see if there is a previous entry that can be iterated to.
+     *
+     * @return <code>true</code> if the iterator has a previous element
+     */
+    boolean hasPrevious();
+
+    /**
+     * Gets the previous element from the collection.
+     *
+     * @return the previous key in the iteration
+     * @throws java.util.NoSuchElementException
+     *          if the iteration is finished
+     */
+    E previous();
+
 }
