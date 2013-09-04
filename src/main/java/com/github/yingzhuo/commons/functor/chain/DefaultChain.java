@@ -17,6 +17,7 @@
 package com.github.yingzhuo.commons.functor.chain;
 
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -24,6 +25,7 @@ import com.github.yingzhuo.commons.exception.FunctorException;
 import com.github.yingzhuo.commons.functor.Chain;
 import com.github.yingzhuo.commons.functor.Command;
 import com.github.yingzhuo.commons.functor.CommandContext;
+import com.github.yingzhuo.commons.functor.iterator.UnmodifiableIterator;
 import com.github.yingzhuo.commons.lang.Validate;
 
 
@@ -231,9 +233,7 @@ public class DefaultChain implements Chain {
 	}
 
 	public Iterator<Command> iterator() {
-//		return ImmutableIterator.decorate(Arrays.asList(commands).iterator());
-		// TODO
-		return null;
+		return UnmodifiableIterator.decorate(Arrays.asList(commands).iterator());
 	}
 
 }
