@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-import com.github.yingzhuo.commons.codec.CharEncoding;
 import com.github.yingzhuo.commons.io.Charsets;
 
 /**

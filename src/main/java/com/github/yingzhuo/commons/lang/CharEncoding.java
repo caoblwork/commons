@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package com.github.yingzhuo.commons.codec;
+package com.github.yingzhuo.commons.lang;
 
 /**
  * Character encoding names required of every implementation of the Java platform.
