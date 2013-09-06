@@ -23,8 +23,8 @@ import com.github.yingzhuo.commons.codec.BinaryDecoder;
 import com.github.yingzhuo.commons.codec.BinaryEncoder;
 import com.github.yingzhuo.commons.exception.DecoderException;
 import com.github.yingzhuo.commons.exception.EncoderException;
+import com.github.yingzhuo.commons.io.CharEncoding;
 import com.github.yingzhuo.commons.io.Charsets;
-import com.github.yingzhuo.commons.lang.CharEncoding;
 
 /**
  * Converts hexadecimal Strings. The charset used for certain operation can be set, the default is set in
