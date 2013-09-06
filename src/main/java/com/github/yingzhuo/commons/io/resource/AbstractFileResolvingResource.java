@@ -31,8 +31,6 @@ import java.net.URLConnection;
  * <p>Detects the "file" protocol as well as the JBoss "vfs" protocol in URLs,
  * resolving file system references accordingly.
  *
- * @author Juergen Hoeller
- * @since 3.0
  */
 public abstract class AbstractFileResolvingResource extends AbstractResource {
 

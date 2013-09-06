@@ -23,8 +23,6 @@ package com.github.yingzhuo.commons.io.resource;
  * or relative file system paths (specified without an explicit prefix,
  * hence applying relative to the local {@link ResourceLoader}'s context).
  *
- * @author Juergen Hoeller
- * @since 2.5
  * @see org.springframework.web.context.support.ServletContextResource
  * @see org.springframework.web.portlet.context.PortletContextResource
  */

@@ -30,8 +30,6 @@ import java.io.InputStream;
  * {@code isOpen()}. Do not use it if you need to keep the resource
  * descriptor somewhere, or if you need to read a stream multiple times.
  *
- * @author Juergen Hoeller
- * @since 28.12.2003
  * @see ByteArrayResource
  * @see ClassPathResource
  * @see FileSystemResource

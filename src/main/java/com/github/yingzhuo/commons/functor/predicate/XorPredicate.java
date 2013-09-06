@@ -21,13 +21,10 @@ import java.io.Serializable;
 import com.github.yingzhuo.commons.functor.Predicate;
 
 /**
- * Predicate implementation that returns true if either of the predicates return true.
+ * Predicate implementation that returns true if predicates return not the same.
  *
- * @author Matt Hall, John Watkinson, Stephen Colebourne
- * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:24 $
- * @since Commons Collections 3.0
  */
-public final class OrPredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
+public final class XorPredicate <T> implements Predicate<T>, PredicateDecorator<T>, Serializable {
 
     /**
      * Serial version UID
@@ -55,7 +52,7 @@ public final class OrPredicate <T> implements Predicate<T>, PredicateDecorator<T
         if (predicate1 == null || predicate2 == null) {
             throw new IllegalArgumentException("Predicate must not be null");
         }
-        return new OrPredicate<T>(predicate1, predicate2);
+        return new XorPredicate<T>(predicate1, predicate2);
     }
 
     /**
@@ -65,20 +62,20 @@ public final class OrPredicate <T> implements Predicate<T>, PredicateDecorator<T
      * @param predicate1 the first predicate to check, not null
      * @param predicate2 the second predicate to check, not null
      */
-    public OrPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
+    public XorPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
         super();
         iPredicate1 = predicate1;
         iPredicate2 = predicate2;
     }
 
     /**
-     * Evaluates the predicate returning true if either predicate returns true.
+     * Evaluates the predicate returning true if predicates return not the same
      *
      * @param object the input object
      * @return true if either decorated predicate returns true
      */
     public boolean evaluate(T object) {
-        return (iPredicate1.evaluate(object) || iPredicate2.evaluate(object));
+        return (iPredicate1.evaluate(object) ^ iPredicate2.evaluate(object));
     }
 
     /**

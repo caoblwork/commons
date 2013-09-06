@@ -33,8 +33,6 @@ import com.github.yingzhuo.commons.lang.Validate;
  * Obviously supports resolution as File, and also as URL.
  * Implements the extended {@link WritableResource} interface.
  *
- * @author Juergen Hoeller
- * @since 28.12.2003
  * @see java.io.File
  */
 public class FileSystemResource extends AbstractResource implements WritableResource {

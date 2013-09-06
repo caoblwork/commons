@@ -34,8 +34,6 @@ import com.github.yingzhuo.commons.lang.Validate;
  * Obviously supports resolution as URL, and also as File in case of
  * the "file:" protocol.
  *
- * @author Juergen Hoeller
- * @since 28.12.2003
  * @see java.net.URL
  */
 public class UrlResource extends AbstractFileResolvingResource {

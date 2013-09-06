@@ -45,13 +45,6 @@ import com.github.yingzhuo.commons.lang.Validate;
  * Spring' Resource abstraction in the core package, on the other hand,
  * already expects the logging system to be available.
  *
- * @author Juergen Hoeller
- * @since 1.1.5
- * @see org.springframework.core.io.Resource
- * @see org.springframework.core.io.ClassPathResource
- * @see org.springframework.core.io.FileSystemResource
- * @see org.springframework.core.io.UrlResource
- * @see org.springframework.core.io.ResourceLoader
  */
 public abstract class ResourceUtils {
 

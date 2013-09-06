@@ -23,8 +23,6 @@ import java.io.OutputStream;
  * Extended interface for a resource that supports writing to it.
  * Provides an {@link #getOutputStream() OutputStream accessor}.
  *
- * @author Juergen Hoeller
- * @since 3.1
  * @see java.io.OutputStream
  */
 public interface WritableResource extends Resource {

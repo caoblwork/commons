@@ -30,8 +30,6 @@ package com.github.yingzhuo.commons.io.resource;
  * is a full-fledged ApplicationContext implementation that provides
  * the same resource path resolution strategy.
  *
- * @author Juergen Hoeller
- * @since 1.1.3
  * @see DefaultResourceLoader
  * @see org.springframework.context.support.FileSystemXmlApplicationContext
  */
