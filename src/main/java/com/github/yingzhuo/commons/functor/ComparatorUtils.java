@@ -238,7 +238,7 @@ public class ComparatorUtils {
     }
     
     /**
-     * Gets a comparator that compares object's toString method's result.
+     * Gets a comparator that compares object's by their string representations.
      * 
      * @return the comparator
      */
@@ -247,7 +247,7 @@ public class ComparatorUtils {
     }
 
     /**
-     * Gets a comparator that compares object's toString method's result.
+     * Gets a comparator that compares object's by their string representations.
      * 
      * @param ignoreCase case sensitive if false
      * @return the comparator

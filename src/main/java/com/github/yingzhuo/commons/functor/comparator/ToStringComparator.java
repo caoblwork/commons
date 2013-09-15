@@ -20,7 +20,8 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 /**
- * A {@link Comparator} for {@link Boolean} objects that can sort by toString method's result.
+ * A {@link Comparator} for {@link Boolean} objects that can sort by 
+ * their string representations。
  * 
  * @author 应卓
  *
