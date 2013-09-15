@@ -24,6 +24,7 @@ import com.github.yingzhuo.commons.functor.comparator.ComparableComparator;
 import com.github.yingzhuo.commons.functor.comparator.ComparatorChain;
 import com.github.yingzhuo.commons.functor.comparator.NullComparator;
 import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+import com.github.yingzhuo.commons.functor.comparator.ToStringComparator;
 import com.github.yingzhuo.commons.functor.comparator.TransformingComparator;
 
 /**
@@ -235,5 +236,23 @@ public class ComparatorUtils {
         int c = comparator.compare(o1, o2);
         return (c > 0) ? o1 : o2;
     }
+    
+    /**
+     * Gets a comparator that compares object's toString method's result.
+     * 
+     * @return the comparator
+     */
+    public static <T> Comparator<T> toStringComparator() {
+    	return new ToStringComparator<T>(false);
+    }
 
+    /**
+     * Gets a comparator that compares object's toString method's result.
+     * 
+     * @param ignoreCase case sensitive if false
+     * @return the comparator
+     */
+    public static <T> Comparator<T> toStringComparator(boolean ignoreCase) {
+    	return new ToStringComparator<T>();
+    }
 }
