@@ -37,7 +37,6 @@ import javax.crypto.IllegalBlockSizeException;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
-@SuppressWarnings({ "restriction" })
 public class RSAUtils {
 
 	/** 私有构造方法 */
