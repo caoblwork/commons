@@ -19,8 +19,8 @@ package com.github.yingzhuo.commons.lang.tuple;
 import java.io.Serializable;
 import java.util.Map;
 
-import com.github.yingzhuo.commons.functor.builder.CompareToBuilder;
 import com.github.yingzhuo.commons.lang.ObjectUtils;
+import com.github.yingzhuo.commons.lang.builder.CompareToBuilder;
 
 
 /**

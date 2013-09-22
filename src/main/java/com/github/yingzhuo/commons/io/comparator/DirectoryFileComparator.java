@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
+import com.github.yingzhuo.commons.lang.comparator.ReverseComparator;
 
 /**
  * Compare two files using the {@link File#isDirectory()} method.

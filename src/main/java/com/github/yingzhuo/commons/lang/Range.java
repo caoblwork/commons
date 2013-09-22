@@ -19,7 +19,7 @@ package com.github.yingzhuo.commons.lang;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.functor.comparator.ComparableComparator;
+import com.github.yingzhuo.commons.lang.comparator.ComparableComparator;
 
 /**
  * <p>An immutable range of objects from a minimum to maximum point inclusive.</p>

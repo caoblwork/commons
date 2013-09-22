@@ -18,8 +18,8 @@ package com.github.yingzhuo.commons.web.cookie;
 
 import javax.servlet.http.Cookie;
 
-import com.github.yingzhuo.commons.functor.Builder;
 import com.github.yingzhuo.commons.lang.Validate;
+import com.github.yingzhuo.commons.lang.builder.Builder;
 
 /**
  * Builder of javax.servlet.http.Cookie

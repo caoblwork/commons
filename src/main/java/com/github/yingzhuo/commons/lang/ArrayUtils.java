@@ -22,10 +22,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-import com.github.yingzhuo.commons.functor.builder.EqualsBuilder;
-import com.github.yingzhuo.commons.functor.builder.HashCodeBuilder;
-import com.github.yingzhuo.commons.functor.builder.ToStringBuilder;
-import com.github.yingzhuo.commons.functor.builder.ToStringStyle;
+import com.github.yingzhuo.commons.lang.builder.EqualsBuilder;
+import com.github.yingzhuo.commons.lang.builder.HashCodeBuilder;
+import com.github.yingzhuo.commons.lang.builder.ToStringBuilder;
+import com.github.yingzhuo.commons.lang.builder.ToStringStyle;
 import com.github.yingzhuo.commons.mutable.MutableInt;
 
 

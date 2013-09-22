@@ -20,8 +20,8 @@ import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import com.github.yingzhuo.commons.functor.comparator.ReverseComparator;
 import com.github.yingzhuo.commons.io.FileUtils;
+import com.github.yingzhuo.commons.lang.comparator.ReverseComparator;
 
 /**
  * Compare the <b>length/size</b> of two files for order (see

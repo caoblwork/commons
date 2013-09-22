@@ -1,11 +1,11 @@
 /*
- * Copyright 2002-2012 the original author or authors.
+ * Copyright (C) 2007 The Guava Authors
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,510 +16,598 @@
 
 package com.github.yingzhuo.commons.functor;
 
-import java.util.Collection;
+import static guava.base.Preconditions.checkNotNull;
+import guava.base.Joiner;
+import guava.base.Objects;
 
-import com.github.yingzhuo.commons.functor.predicate.AllPredicate;
-import com.github.yingzhuo.commons.functor.predicate.AndPredicate;
-import com.github.yingzhuo.commons.functor.predicate.AnyPredicate;
-import com.github.yingzhuo.commons.functor.predicate.EqualPredicate;
-import com.github.yingzhuo.commons.functor.predicate.ExceptionPredicate;
-import com.github.yingzhuo.commons.functor.predicate.FalsePredicate;
-import com.github.yingzhuo.commons.functor.predicate.IdentityPredicate;
-import com.github.yingzhuo.commons.functor.predicate.InstanceofPredicate;
-import com.github.yingzhuo.commons.functor.predicate.NonePredicate;
-import com.github.yingzhuo.commons.functor.predicate.NotNullPredicate;
-import com.github.yingzhuo.commons.functor.predicate.NotPredicate;
-import com.github.yingzhuo.commons.functor.predicate.NullIsExceptionPredicate;
-import com.github.yingzhuo.commons.functor.predicate.NullIsFalsePredicate;
-import com.github.yingzhuo.commons.functor.predicate.NullIsTruePredicate;
-import com.github.yingzhuo.commons.functor.predicate.NullPredicate;
-import com.github.yingzhuo.commons.functor.predicate.OnePredicate;
-import com.github.yingzhuo.commons.functor.predicate.OrPredicate;
-import com.github.yingzhuo.commons.functor.predicate.TransformedPredicate;
-import com.github.yingzhuo.commons.functor.predicate.TransformerPredicate;
-import com.github.yingzhuo.commons.functor.predicate.TruePredicate;
-import com.github.yingzhuo.commons.functor.predicate.UniquePredicate;
-import com.github.yingzhuo.commons.functor.predicate.XorPredicate;
-import com.github.yingzhuo.commons.functor.transformer.InvokerTransformer;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.annotation.Nullable;
+
+
 
 /**
- * <code>PredicateUtils</code> provides reference implementations and utilities
- * for the Predicate functor interface. The supplied predicates are:
- * <ul>
- * <li>Invoker - returns the result of a method call on the input object
- * <li>InstanceOf - true if the object is an instanceof a class
- * <li>Equal - true if the object equals() a specified object
- * <li>Identity - true if the object == a specified object
- * <li>Null - true if the object is null
- * <li>NotNull - true if the object is not null
- * <li>Unique - true if the object has not already been evaluated
- * <li>And/All - true if all of the predicates are true
- * <li>Or/Any - true if any of the predicates is true
- * <li>Either/One - true if only one of the predicate is true
- * <li>Neither/None - true if none of the predicates are true
- * <li>Not - true if the predicate is false, and vice versa
- * <li>Transformer - wraps a Transformer as a Predicate
- * <li>True - always return true
- * <li>False - always return false
- * <li>Exception - always throws an exception
- * <li>NullIsException/NullIsFalse/NullIsTrue - check for null input
- * <li>Transformed - transforms the input before calling the predicate
- * </ul>
- * All the supplied predicates are Serializable.
+ * Static utility methods pertaining to {@code Predicate} instances.
  *
- * @author Stephen Colebourne
- * @author Matt Hall, John Watkinson, Ola Berg
- * @version $Revision: 1.1 $ $Date: 2005/10/11 17:05:19 $
- * @since Commons Collections 3.0
+ * <p>All methods returns serializable predicates as long as they're given
+ * serializable parameters.
+ *
+ * <p>See the Guava User Guide article on <a href=
+ * "http://code.google.com/p/guava-libraries/wiki/FunctionalExplained">the
+ * use of {@code Predicate}</a>.
+ *
+ * @author Kevin Bourrillion
+ * @since 2.0 (imported from Google Collections Library)
  */
-@SuppressWarnings("all")
-public class PredicateUtils {
+public final class PredicateUtils {
+  private PredicateUtils() {}
 
-    /**
-     * This class is not normally instantiated.
-     */
-    public PredicateUtils() {
-        super();
+  // TODO(kevinb): considering having these implement a VisitablePredicate
+  // interface which specifies an accept(PredicateVisitor) method.
+
+  /**
+   * Returns a predicate that always evaluates to {@code true}.
+   */
+  public static <T> Predicate<T> alwaysTrue() {
+    return ObjectPredicate.ALWAYS_TRUE.withNarrowedType();
+  }
+
+  /**
+   * Returns a predicate that always evaluates to {@code false}.
+   */
+  public static <T> Predicate<T> alwaysFalse() {
+    return ObjectPredicate.ALWAYS_FALSE.withNarrowedType();
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the object reference
+   * being tested is null.
+   */
+  public static <T> Predicate<T> isNull() {
+    return ObjectPredicate.IS_NULL.withNarrowedType();
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the object reference
+   * being tested is not null.
+   */
+  public static <T> Predicate<T> notNull() {
+    return ObjectPredicate.NOT_NULL.withNarrowedType();
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the given predicate
+   * evaluates to {@code false}.
+   */
+  public static <T> Predicate<T> not(Predicate<T> predicate) {
+    return new NotPredicate<T>(predicate);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if each of its
+   * components evaluates to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a false
+   * predicate is found. It defensively copies the iterable passed in, so future
+   * changes to it won't alter the behavior of this predicate. If {@code
+   * components} is empty, the returned predicate will always evaluate to {@code
+   * true}.
+   */
+  public static <T> Predicate<T> and(
+      Iterable<? extends Predicate<? super T>> components) {
+    return new AndPredicate<T>(defensiveCopy(components));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if each of its
+   * components evaluates to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a false
+   * predicate is found. It defensively copies the array passed in, so future
+   * changes to it won't alter the behavior of this predicate. If {@code
+   * components} is empty, the returned predicate will always evaluate to {@code
+   * true}.
+   */
+  public static <T> Predicate<T> and(Predicate<? super T>... components) {
+    return new AndPredicate<T>(defensiveCopy(components));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if both of its
+   * components evaluate to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a false
+   * predicate is found.
+   */
+  public static <T> Predicate<T> and(Predicate<? super T> first,
+      Predicate<? super T> second) {
+    return new AndPredicate<T>(PredicateUtils.<T>asList(
+        checkNotNull(first), checkNotNull(second)));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if any one of its
+   * components evaluates to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a
+   * true predicate is found. It defensively copies the iterable passed in, so
+   * future changes to it won't alter the behavior of this predicate. If {@code
+   * components} is empty, the returned predicate will always evaluate to {@code
+   * false}.
+   */
+  public static <T> Predicate<T> or(
+      Iterable<? extends Predicate<? super T>> components) {
+    return new OrPredicate<T>(defensiveCopy(components));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if any one of its
+   * components evaluates to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a
+   * true predicate is found. It defensively copies the array passed in, so
+   * future changes to it won't alter the behavior of this predicate. If {@code
+   * components} is empty, the returned predicate will always evaluate to {@code
+   * false}.
+   */
+  public static <T> Predicate<T> or(Predicate<? super T>... components) {
+    return new OrPredicate<T>(defensiveCopy(components));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if either of its
+   * components evaluates to {@code true}. The components are evaluated in
+   * order, and evaluation will be "short-circuited" as soon as a
+   * true predicate is found.
+   */
+  public static <T> Predicate<T> or(
+      Predicate<? super T> first, Predicate<? super T> second) {
+    return new OrPredicate<T>(PredicateUtils.<T>asList(
+        checkNotNull(first), checkNotNull(second)));
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the object being
+   * tested {@code equals()} the given target or both are null.
+   */
+  public static <T> Predicate<T> equalTo(@Nullable T target) {
+    return (target == null)
+        ? PredicateUtils.<T>isNull()
+        : new IsEqualToPredicate<T>(target);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the object being
+   * tested is an instance of the given class. If the object being tested
+   * is {@code null} this predicate evaluates to {@code false}.
+   *
+   * <p>If you want to filter an {@code Iterable} to narrow its type, consider
+   * using {@link com.github.yingzhuo.commons.collections.Iterables#filter(Iterable, Class)}
+   * in preference.
+   *
+   * <p><b>Warning:</b> contrary to the typical assumptions about predicates (as
+   * documented at {@link Predicate#apply}), the returned predicate may not be
+   * <i>consistent with equals</i>. For example, {@code
+   * instanceOf(ArrayList.class)} will yield different results for the two equal
+   * instances {@code Lists.newArrayList(1)} and {@code Arrays.asList(1)}.
+   */
+  public static Predicate<Object> instanceOf(Class<?> clazz) {
+    return new InstanceOfPredicate(clazz);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the class being
+   * tested is assignable from the given class.  The returned predicate
+   * does not allow null inputs.
+   *
+   * @since 10.0
+   */
+  public static Predicate<Class<?>> assignableFrom(Class<?> clazz) {
+    return new AssignableFromPredicate(clazz);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the object reference
+   * being tested is a member of the given collection. It does not defensively
+   * copy the collection passed in, so future changes to it will alter the
+   * behavior of the predicate.
+   *
+   * <p>This method can technically accept any {@code Collection<?>}, but using
+   * a typed collection helps prevent bugs. This approach doesn't block any
+   * potential users since it is always possible to use {@code
+   * Predicates.<Object>in()}.
+   *
+   * @param target the collection that may contain the function input
+   */
+  public static <T> Predicate<T> in(Collection<? extends T> target) {
+    return new InPredicate<T>(target);
+  }
+
+  /**
+   * Returns the composition of a function and a predicate. For every {@code x},
+   * the generated predicate returns {@code predicate(function(x))}.
+   *
+   * @return the composition of the provided function and predicate
+   */
+  public static <A, B> Predicate<A> compose(
+      Predicate<B> predicate, Function<A, ? extends B> function) {
+    return new CompositionPredicate<A, B>(predicate, function);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the
+   * {@code CharSequence} being tested contains any match for the given
+   * regular expression pattern. The test used is equivalent to
+   * {@code Pattern.compile(pattern).matcher(arg).find()}
+   *
+   * @throws java.util.regex.PatternSyntaxException if the pattern is invalid
+   * @since 3.0
+   */
+  public static Predicate<CharSequence> containsPattern(String pattern) {
+    return new ContainsPatternPredicate(pattern);
+  }
+
+  /**
+   * Returns a predicate that evaluates to {@code true} if the
+   * {@code CharSequence} being tested contains any match for the given
+   * regular expression pattern. The test used is equivalent to
+   * {@code pattern.matcher(arg).find()}
+   *
+   * @since 3.0
+   */
+  public static Predicate<CharSequence> contains(Pattern pattern) {
+    return new ContainsPatternPredicate(pattern);
+  }
+
+  // End public API, begin private implementation classes.
+
+  // Package private for GWT serialization.
+  enum ObjectPredicate implements Predicate<Object> {
+    ALWAYS_TRUE {
+      @Override public boolean apply(@Nullable Object o) {
+        return true;
+      }
+    },
+    ALWAYS_FALSE {
+      @Override public boolean apply(@Nullable Object o) {
+        return false;
+      }
+    },
+    IS_NULL {
+      @Override public boolean apply(@Nullable Object o) {
+        return o == null;
+      }
+    },
+    NOT_NULL {
+      @Override public boolean apply(@Nullable Object o) {
+        return o != null;
+      }
+    };
+
+    @SuppressWarnings("unchecked") // these Object predicates work for any T
+    <T> Predicate<T> withNarrowedType() {
+      return (Predicate<T>) this;
+    }
+  }
+
+  /** @see PredicateUtils#not(Predicate) */
+  private static class NotPredicate<T> implements Predicate<T>, Serializable {
+    final Predicate<T> predicate;
+
+    NotPredicate(Predicate<T> predicate) {
+      this.predicate = checkNotNull(predicate);
+    }
+    @Override
+    public boolean apply(@Nullable T t) {
+      return !predicate.apply(t);
+    }
+    @Override public int hashCode() {
+      return ~predicate.hashCode();
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof NotPredicate) {
+        NotPredicate<?> that = (NotPredicate<?>) obj;
+        return predicate.equals(that.predicate);
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "Not(" + predicate.toString() + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  private static final Joiner COMMA_JOINER = Joiner.on(",");
+
+  /** @see PredicateUtils#and(Iterable) */
+  private static class AndPredicate<T> implements Predicate<T>, Serializable {
+    private final List<? extends Predicate<? super T>> components;
+
+    private AndPredicate(List<? extends Predicate<? super T>> components) {
+      this.components = components;
+    }
+    @Override
+    public boolean apply(@Nullable T t) {
+      // Avoid using the Iterator to avoid generating garbage (issue 820).
+      for (int i = 0; i < components.size(); i++) {
+        if (!components.get(i).apply(t)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    @Override public int hashCode() {
+      // add a random number to avoid collisions with OrPredicate
+      return components.hashCode() + 0x12472c2c;
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof AndPredicate) {
+        AndPredicate<?> that = (AndPredicate<?>) obj;
+        return components.equals(that.components);
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "And(" + COMMA_JOINER.join(components) + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#or(Iterable) */
+  private static class OrPredicate<T> implements Predicate<T>, Serializable {
+    private final List<? extends Predicate<? super T>> components;
+
+    private OrPredicate(List<? extends Predicate<? super T>> components) {
+      this.components = components;
+    }
+    @Override
+    public boolean apply(@Nullable T t) {
+      // Avoid using the Iterator to avoid generating garbage (issue 820).
+      for (int i = 0; i < components.size(); i++) {
+        if (components.get(i).apply(t)) {
+          return true;
+        }
+      }
+      return false;
+    }
+    @Override public int hashCode() {
+      // add a random number to avoid collisions with AndPredicate
+      return components.hashCode() + 0x053c91cf;
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof OrPredicate) {
+        OrPredicate<?> that = (OrPredicate<?>) obj;
+        return components.equals(that.components);
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "Or(" + COMMA_JOINER.join(components) + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#equalTo(Object) */
+  private static class IsEqualToPredicate<T>
+      implements Predicate<T>, Serializable {
+    private final T target;
+
+    private IsEqualToPredicate(T target) {
+      this.target = target;
+    }
+    @Override
+    public boolean apply(T t) {
+      return target.equals(t);
+    }
+    @Override public int hashCode() {
+      return target.hashCode();
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof IsEqualToPredicate) {
+        IsEqualToPredicate<?> that = (IsEqualToPredicate<?>) obj;
+        return target.equals(that.target);
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "IsEqualTo(" + target + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#instanceOf(Class) */
+  private static class InstanceOfPredicate
+      implements Predicate<Object>, Serializable {
+    private final Class<?> clazz;
+
+    private InstanceOfPredicate(Class<?> clazz) {
+      this.clazz = checkNotNull(clazz);
+    }
+    @Override
+    public boolean apply(@Nullable Object o) {
+      return clazz.isInstance(o);
+    }
+    @Override public int hashCode() {
+      return clazz.hashCode();
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof InstanceOfPredicate) {
+        InstanceOfPredicate that = (InstanceOfPredicate) obj;
+        return clazz == that.clazz;
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "IsInstanceOf(" + clazz.getName() + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#assignableFrom(Class) */
+  private static class AssignableFromPredicate
+      implements Predicate<Class<?>>, Serializable {
+    private final Class<?> clazz;
+
+    private AssignableFromPredicate(Class<?> clazz) {
+      this.clazz = checkNotNull(clazz);
+    }
+    @Override
+    public boolean apply(Class<?> input) {
+      return clazz.isAssignableFrom(input);
+    }
+    @Override public int hashCode() {
+      return clazz.hashCode();
+    }
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof AssignableFromPredicate) {
+        AssignableFromPredicate that = (AssignableFromPredicate) obj;
+        return clazz == that.clazz;
+      }
+      return false;
+    }
+    @Override public String toString() {
+      return "IsAssignableFrom(" + clazz.getName() + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#in(Collection) */
+  private static class InPredicate<T> implements Predicate<T>, Serializable {
+    private final Collection<?> target;
+
+    private InPredicate(Collection<?> target) {
+      this.target = checkNotNull(target);
     }
 
-    // Simple predicates
-    //-----------------------------------------------------------------------------
-
-    /**
-     * Gets a Predicate that always throws an exception.
-     * This could be useful during testing as a placeholder.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.ExceptionPredicate
-     */
-    @SuppressWarnings("unchecked")
-	public static <T> Predicate<T> exceptionPredicate() {
-        return ExceptionPredicate.INSTANCE;
+    @Override
+    public boolean apply(@Nullable T t) {
+      try {
+        return target.contains(t);
+      } catch (NullPointerException e) {
+        return false;
+      } catch (ClassCastException e) {
+        return false;
+      }
     }
 
-    /**
-     * Gets a Predicate that always returns true.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.TruePredicate
-     */
-    public static <T> Predicate<T> truePredicate() {
-        return TruePredicate.getInstance();
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof InPredicate) {
+        InPredicate<?> that = (InPredicate<?>) obj;
+        return target.equals(that.target);
+      }
+      return false;
     }
 
-    /**
-     * Gets a Predicate that always returns false.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.FalsePredicate
-     */
-    public static <T> Predicate<T> falsePredicate() {
-        return FalsePredicate.getInstance();
+    @Override public int hashCode() {
+      return target.hashCode();
     }
 
-    /**
-     * Gets a Predicate that checks if the input object passed in is null.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.NullPredicate
-     */
-    public static <T> Predicate<T> nullPredicate() {
-        return NullPredicate.getInstance();
+    @Override public String toString() {
+      return "In(" + target + ")";
+    }
+    private static final long serialVersionUID = 0;
+  }
+
+  /** @see PredicateUtils#compose(Predicate, Function) */
+  private static class CompositionPredicate<A, B>
+      implements Predicate<A>, Serializable {
+    final Predicate<B> p;
+    final Function<A, ? extends B> f;
+
+    private CompositionPredicate(Predicate<B> p, Function<A, ? extends B> f) {
+      this.p = checkNotNull(p);
+      this.f = checkNotNull(f);
     }
 
-    /**
-     * Gets a Predicate that checks if the input object passed in is not null.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.NotNullPredicate
-     */
-    public static <T> Predicate<T> notNullPredicate() {
-        return NotNullPredicate.getInstance();
+    @Override
+    public boolean apply(@Nullable A a) {
+      return p.apply(f.apply(a));
     }
 
-    /**
-     * Creates a Predicate that checks if the input object is equal to the
-     * specified object using equals().
-     *
-     * @param value the value to compare against
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.EqualPredicate
-     */
-    public static <T> Predicate<T> equalPredicate(T value) {
-        return EqualPredicate.getInstance(value);
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof CompositionPredicate) {
+        CompositionPredicate<?, ?> that = (CompositionPredicate<?, ?>) obj;
+        return f.equals(that.f) && p.equals(that.p);
+      }
+      return false;
     }
 
-    /**
-     * Creates a Predicate that checks if the input object is equal to the
-     * specified object by identity.
-     *
-     * @param value the value to compare against
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.IdentityPredicate
-     */
-    public static <T> Predicate<T> identityPredicate(T value) {
-        return IdentityPredicate.getInstance(value);
+    @Override public int hashCode() {
+      return f.hashCode() ^ p.hashCode();
     }
 
-    /**
-     * Creates a Predicate that checks if the object passed in is of
-     * a particular type, using instanceof. A <code>null</code> input
-     * object will return <code>false</code>.
-     *
-     * @param type the type to check for, may not be null
-     * @return the predicate
-     * @throws IllegalArgumentException if the class is null
-     * @see org.apache.commons.collections15.functors.InstanceofPredicate
-     */
-    public static Predicate instanceofPredicate(Class type) {
-        return InstanceofPredicate.getInstance(type);
+    @Override public String toString() {
+      return p.toString() + "(" + f.toString() + ")";
     }
 
-    /**
-     * Creates a Predicate that returns true the first time an object is
-     * encountered, and false if the same object is received
-     * again. The comparison is by equals(). A <code>null</code> input object
-     * is accepted and will return true the first time, and false subsequently
-     * as well.
-     *
-     * @return the predicate
-     * @see org.apache.commons.collections15.functors.UniquePredicate
-     */
-    public static <T> Predicate<T> uniquePredicate() {
-        // must return new instance each time
-        return UniquePredicate.getInstance();
+    private static final long serialVersionUID = 0;
+  }
+
+  /**
+   * @see PredicateUtils#contains(Pattern)
+   * @see PredicateUtils#containsPattern(String)
+   */
+  private static class ContainsPatternPredicate
+      implements Predicate<CharSequence>, Serializable {
+    final Pattern pattern;
+
+    ContainsPatternPredicate(Pattern pattern) {
+      this.pattern = checkNotNull(pattern);
     }
 
-    /**
-     * Creates a Predicate that invokes a method on the input object.
-     * The method must return either a boolean or a non-null Boolean,
-     * and have no parameters. If the input object is null, a
-     * PredicateException is thrown.
-     * <p/>
-     * For example, <code>PredicateUtils.invokerPredicate("isEmpty");</code>
-     * will call the <code>isEmpty</code> method on the input object to
-     * determine the predicate result.
-     *
-     * @param methodName the method name to call on the input object, may not be null
-     * @return the predicate
-     * @throws IllegalArgumentException if the methodName is null.
-     * @see org.apache.commons.collections15.functors.InvokerTransformer
-     * @see org.apache.commons.collections15.functors.TransformerPredicate
-     */
-    public static Predicate invokerPredicate(String methodName) {
-        // reuse transformer as it has caching - this is lazy really, should have inner class here
-        return asPredicate(InvokerTransformer.getInstance(methodName));
+    ContainsPatternPredicate(String patternStr) {
+      this(Pattern.compile(patternStr));
     }
 
-    /**
-     * Creates a Predicate that invokes a method on the input object.
-     * The method must return either a boolean or a non-null Boolean,
-     * and have no parameters. If the input object is null, a
-     * PredicateException is thrown.
-     * <p/>
-     * For example, <code>PredicateUtils.invokerPredicate("isEmpty");</code>
-     * will call the <code>isEmpty</code> method on the input object to
-     * determine the predicate result.
-     *
-     * @param methodName the method name to call on the input object, may not be null
-     * @param paramTypes the parameter types
-     * @param args       the arguments
-     * @return the predicate
-     * @throws IllegalArgumentException if the method name is null
-     * @throws IllegalArgumentException if the paramTypes and args don't match
-     * @see org.apache.commons.collections15.functors.InvokerTransformer
-     * @see org.apache.commons.collections15.functors.TransformerPredicate
-     */
-    public static Predicate invokerPredicate(String methodName, Class[] paramTypes, Object[] args) {
-        // reuse transformer as it has caching - this is lazy really, should have inner class here
-        return asPredicate(InvokerTransformer.getInstance(methodName, paramTypes, args));
+    @Override
+    public boolean apply(CharSequence t) {
+      return pattern.matcher(t).find();
     }
 
-    // Boolean combinations
-    //-----------------------------------------------------------------------------
+    @Override public int hashCode() {
+      // Pattern uses Object.hashCode, so we have to reach
+      // inside to build a hashCode consistent with equals.
 
-    /**
-     * Create a new Predicate that returns true only if both of the specified
-     * predicates are true.
-     *
-     * @param predicate1 the first predicate, may not be null
-     * @param predicate2 the second predicate, may not be null
-     * @return the <code>and</code> predicate
-     * @throws IllegalArgumentException if either predicate is null
-     * @see org.apache.commons.collections15.functors.AndPredicate
-     */
-    public static <T> Predicate<T> andPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
-        return AndPredicate.<T>getInstance(predicate1, predicate2);
+      return Objects.hashCode(pattern.pattern(), pattern.flags());
     }
 
-    /**
-     * Create a new Predicate that returns true only if all of the specified
-     * predicates are true.
-     *
-     * @param predicates an array of predicates to check, may not be null
-     * @return the <code>all</code> predicate
-     * @throws IllegalArgumentException if the predicates array is null
-     * @throws IllegalArgumentException if the predicates array has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the array is null
-     * @see org.apache.commons.collections15.functors.AllPredicate
-     */
-    public static <T> Predicate<T> allPredicate(Predicate<? super T> ... predicates) {
-        return AllPredicate.getInstance(predicates);
+    @Override public boolean equals(@Nullable Object obj) {
+      if (obj instanceof ContainsPatternPredicate) {
+        ContainsPatternPredicate that = (ContainsPatternPredicate) obj;
+
+        // Pattern uses Object (identity) equality, so we have to reach
+        // inside to compare individual fields.
+        return Objects.equal(pattern.pattern(), that.pattern.pattern())
+            && Objects.equal(pattern.flags(), that.pattern.flags());
+      }
+      return false;
     }
 
-    /**
-     * Create a new Predicate that returns true only if all of the specified
-     * predicates are true. The predicates are checked in iterator order.
-     *
-     * @param predicates a collection of predicates to check, may not be null
-     * @return the <code>all</code> predicate
-     * @throws IllegalArgumentException if the predicates collection is null
-     * @throws IllegalArgumentException if the predicates collection has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the collection is null
-     * @see org.apache.commons.collections15.functors.AllPredicate
-     */
-    public static <T> Predicate<T> allPredicate(Collection<Predicate<? super T>> predicates) {
-        return AllPredicate.getInstance(predicates);
+    @Override public String toString() {
+      return Objects.toStringHelper(this)
+          .add("pattern", pattern)
+          .add("pattern.flags", Integer.toHexString(pattern.flags()))
+          .toString();
     }
 
-    /**
-     * Create a new Predicate that returns true if either of the specified
-     * predicates are true.
-     *
-     * @param predicate1 the first predicate, may not be null
-     * @param predicate2 the second predicate, may not be null
-     * @return the <code>or</code> predicate
-     * @throws IllegalArgumentException if either predicate is null
-     * @see org.apache.commons.collections15.functors.OrPredicate
-     */
-    public static <T> Predicate<T> orPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
-        return OrPredicate.<T>getInstance(predicate1, predicate2);
+    private static final long serialVersionUID = 0;
+  }
+
+  @SuppressWarnings("unchecked")
+  private static <T> List<Predicate<? super T>> asList(
+      Predicate<? super T> first, Predicate<? super T> second) {
+    return Arrays.<Predicate<? super T>>asList(first, second);
+  }
+
+  private static <T> List<T> defensiveCopy(T... array) {
+    return defensiveCopy(Arrays.asList(array));
+  }
+
+  static <T> List<T> defensiveCopy(Iterable<T> iterable) {
+    ArrayList<T> list = new ArrayList<T>();
+    for (T element : iterable) {
+      list.add(checkNotNull(element));
     }
-
-    /**
-     * Create a new Predicate that returns true if predicate returns not same
-     * predicates are true.
-     *
-     * @param predicate1 the first predicate, may not be null
-     * @param predicate2 the second predicate, may not be null
-     * @return the <code>xor</code> predicate
-     * @throws IllegalArgumentException if either predicate is null
-     * @see org.apache.commons.collections15.functors.OrPredicate
-     */
-    public static <T> Predicate<T> xorPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
-    	return XorPredicate.<T>getInstance(predicate1, predicate2);
-    }
-
-    /**
-     * Create a new Predicate that returns true if any of the specified
-     * predicates are true.
-     *
-     * @param predicates an array of predicates to check, may not be null
-     * @return the <code>any</code> predicate
-     * @throws IllegalArgumentException if the predicates array is null
-     * @throws IllegalArgumentException if the predicates array has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the array is null
-     * @see org.apache.commons.collections15.functors.AnyPredicate
-     */
-    public static <T> Predicate<T> anyPredicate(Predicate<? super T> ... predicates) {
-        return AnyPredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if any of the specified
-     * predicates are true. The predicates are checked in iterator order.
-     *
-     * @param predicates a collection of predicates to check, may not be null
-     * @return the <code>any</code> predicate
-     * @throws IllegalArgumentException if the predicates collection is null
-     * @throws IllegalArgumentException if the predicates collection has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the collection is null
-     * @see org.apache.commons.collections15.functors.AnyPredicate
-     */
-    public static <T> Predicate<T> anyPredicate(Collection<Predicate<? super T>> predicates) {
-        return AnyPredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if one, but not both, of the
-     * specified predicates are true.
-     *
-     * @param predicate1 the first predicate, may not be null
-     * @param predicate2 the second predicate, may not be null
-     * @return the <code>either</code> predicate
-     * @throws IllegalArgumentException if either predicate is null
-     * @see org.apache.commons.collections15.functors.OnePredicate
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> eitherPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
-        return onePredicate(new Predicate[]{predicate1, predicate2});
-    }
-
-    /**
-     * Create a new Predicate that returns true if only one of the specified
-     * predicates are true.
-     *
-     * @param predicates an array of predicates to check, may not be null
-     * @return the <code>one</code> predicate
-     * @throws IllegalArgumentException if the predicates array is null
-     * @throws IllegalArgumentException if the predicates array has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the array is null
-     * @see org.apache.commons.collections15.functors.OnePredicate
-     */
-    public static <T> Predicate<T> onePredicate(Predicate<? super T> ... predicates) {
-        return OnePredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if only one of the specified
-     * predicates are true. The predicates are checked in iterator order.
-     *
-     * @param predicates a collection of predicates to check, may not be null
-     * @return the <code>one</code> predicate
-     * @throws IllegalArgumentException if the predicates collection is null
-     * @throws IllegalArgumentException if the predicates collection has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the collection is null
-     * @see org.apache.commons.collections15.functors.OnePredicate
-     */
-    public static <T> Predicate<T> onePredicate(Collection<Predicate<? super T>> predicates) {
-        return OnePredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if neither of the specified
-     * predicates are true.
-     *
-     * @param predicate1 the first predicate, may not be null
-     * @param predicate2 the second predicate, may not be null
-     * @return the <code>neither</code> predicate
-     * @throws IllegalArgumentException if either predicate is null
-     * @see org.apache.commons.collections15.functors.NonePredicate
-     */
-    @SuppressWarnings("unchecked")
-    public static <T> Predicate<T> neitherPredicate(Predicate<? super T> predicate1, Predicate<? super T> predicate2) {
-        return nonePredicate(new Predicate[]{predicate1, predicate2});
-    }
-
-    /**
-     * Create a new Predicate that returns true if none of the specified
-     * predicates are true.
-     *
-     * @param predicates an array of predicates to check, may not be null
-     * @return the <code>none</code> predicate
-     * @throws IllegalArgumentException if the predicates array is null
-     * @throws IllegalArgumentException if the predicates array has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the array is null
-     * @see org.apache.commons.collections15.functors.NonePredicate
-     */
-    public static <T> Predicate<T> nonePredicate(Predicate<? super T> ... predicates) {
-        return NonePredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if none of the specified
-     * predicates are true. The predicates are checked in iterator order.
-     *
-     * @param predicates a collection of predicates to check, may not be null
-     * @return the <code>none</code> predicate
-     * @throws IllegalArgumentException if the predicates collection is null
-     * @throws IllegalArgumentException if the predicates collection has less than 2 elements
-     * @throws IllegalArgumentException if any predicate in the collection is null
-     * @see org.apache.commons.collections15.functors.NonePredicate
-     */
-    public static <T> Predicate<T> nonePredicate(Collection<Predicate<? super T>> predicates) {
-        return NonePredicate.getInstance(predicates);
-    }
-
-    /**
-     * Create a new Predicate that returns true if the specified predicate
-     * returns false and vice versa.
-     *
-     * @param predicate the predicate to not
-     * @return the <code>not</code> predicate
-     * @throws IllegalArgumentException if the predicate is null
-     * @see org.apache.commons.collections15.functors.NotPredicate
-     */
-    public static <T> Predicate<T> notPredicate(Predicate<T> predicate) {
-        return NotPredicate.getInstance(predicate);
-    }
-
-    // Adaptors
-    //-----------------------------------------------------------------------------
-
-    /**
-     * Create a new Predicate that wraps a Transformer. The Transformer must
-     * return either Boolean.TRUE or Boolean.FALSE otherwise a PredicateException
-     * will be thrown.
-     *
-     * @param transformer the transformer to wrap, may not be null
-     * @return the transformer wrapping predicate
-     * @throws IllegalArgumentException if the transformer is null
-     * @see org.apache.commons.collections15.functors.TransformerPredicate
-     */
-    public static <T> Predicate<T> asPredicate(Transformer<T, Boolean> transformer) {
-        return TransformerPredicate.getInstance(transformer);
-    }
-
-    // Null handlers
-    //-----------------------------------------------------------------------------
-
-    /**
-     * Gets a Predicate that throws an exception if the input object is null,
-     * otherwise it calls the specified Predicate. This allows null handling
-     * behaviour to be added to Predicates that don't support nulls.
-     *
-     * @param predicate the predicate to wrap, may not be null
-     * @return the predicate
-     * @throws IllegalArgumentException if the predicate is null.
-     * @see org.apache.commons.collections15.functors.NullIsExceptionPredicate
-     */
-    public static <T> Predicate<T> nullIsExceptionPredicate(Predicate<T> predicate) {
-        return NullIsExceptionPredicate.getInstance(predicate);
-    }
-
-    /**
-     * Gets a Predicate that returns false if the input object is null, otherwise
-     * it calls the specified Predicate. This allows null handling behaviour to
-     * be added to Predicates that don't support nulls.
-     *
-     * @param predicate the predicate to wrap, may not be null
-     * @return the predicate
-     * @throws IllegalArgumentException if the predicate is null.
-     * @see org.apache.commons.collections15.functors.NullIsFalsePredicate
-     */
-    public static <T> Predicate<T> nullIsFalsePredicate(Predicate<T> predicate) {
-        return NullIsFalsePredicate.getInstance(predicate);
-    }
-
-    /**
-     * Gets a Predicate that returns true if the input object is null, otherwise
-     * it calls the specified Predicate. This allows null handling behaviour to
-     * be added to Predicates that don't support nulls.
-     *
-     * @param predicate the predicate to wrap, may not be null
-     * @return the predicate
-     * @throws IllegalArgumentException if the predicate is null.
-     * @see org.apache.commons.collections15.functors.NullIsTruePredicate
-     */
-    public static <T> Predicate<T> nullIsTruePredicate(Predicate<T> predicate) {
-        return NullIsTruePredicate.getInstance(predicate);
-    }
-
-    // Transformed
-    //-----------------------------------------------------------------------
-    /**
-     * Creates a predicate that transforms the input object before passing it
-     * to the predicate.
-     *
-     * @param transformer the transformer to call first
-     * @param predicate   the predicate to call with the result of the transform
-     * @return the predicate
-     * @throws IllegalArgumentException if the transformer or the predicate is null
-     * @see org.apache.commons.collections15.functors.TransformedPredicate
-     * @since Commons Collections 3.1
-     */
-    public static <I,O> Predicate<I> transformedPredicate(Transformer<I, ? extends O> transformer, Predicate<? super O> predicate) {
-        return TransformedPredicate.getInstance(transformer, predicate);
-    }
-
+    return list;
+  }
 }
